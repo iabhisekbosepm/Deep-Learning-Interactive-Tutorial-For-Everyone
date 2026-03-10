@@ -349,44 +349,17 @@ prediction = <span class="function">argmax</span>(output)  <span class="comment"
     },
 
     predictDigit() {
-        // Simulate a neural network prediction based on pixel density analysis
+        // Lightweight deterministic classifier for consistent demo behavior
         const canvas = document.getElementById('drawCanvas');
         const ctx = canvas.getContext('2d');
         const imageData = ctx.getImageData(0, 0, 280, 280);
-        const pixels = imageData.data;
-
-        // Analyze drawing regions (simple heuristic-based simulation)
-        let totalBrightness = 0;
-        let centerX = 0, centerY = 0, pixelCount = 0;
-        const regions = new Array(9).fill(0); // 3x3 grid
-
-        for (let y = 0; y < 280; y++) {
-            for (let x = 0; x < 280; x++) {
-                const idx = (y * 280 + x) * 4;
-                const brightness = pixels[idx]; // R channel (white on black)
-                if (brightness > 50) {
-                    totalBrightness += brightness;
-                    centerX += x;
-                    centerY += y;
-                    pixelCount++;
-
-                    const gx = Math.min(Math.floor(x / 94), 2);
-                    const gy = Math.min(Math.floor(y / 94), 2);
-                    regions[gy * 3 + gx] += brightness;
-                }
-            }
-        }
-
-        if (pixelCount < 20) {
+        const features = this.extractDigitFeatures(imageData);
+        if (!features) {
             App.showToast('Draw something!', 'Please draw a digit first');
             return;
         }
 
-        centerX /= pixelCount;
-        centerY /= pixelCount;
-
-        // Generate "believable" prediction scores based on drawing features
-        const scores = this.generatePrediction(regions, centerX, centerY, totalBrightness, pixelCount);
+        const scores = this.generatePrediction(features);
 
         // Animate the bars
         const maxScore = Math.max(...scores);
@@ -413,37 +386,218 @@ prediction = <span class="function">argmax</span>(output)  <span class="comment"
         }, 600);
     },
 
-    generatePrediction(regions, cx, cy, brightness, count) {
-        // Heuristic-based pseudo prediction for demo
-        const scores = new Array(10).fill(0);
+    extractDigitFeatures(imageData) {
+        const src = imageData.data;
+        const gridSize = 28;
+        const block = 10;
+        const grid = Array.from({ length: gridSize }, () => new Array(gridSize).fill(0));
 
-        // Use region patterns to influence scores
-        const norm = regions.map(r => r / (brightness || 1));
-        const verticalSymmetry = Math.abs(norm[0] + norm[3] + norm[6] - norm[2] - norm[5] - norm[8]);
-        const horizontalLine = norm[3] + norm[4] + norm[5];
-        const topHeavy = (norm[0] + norm[1] + norm[2]) / ((norm[6] + norm[7] + norm[8]) || 0.01);
-        const centerHeavy = norm[4];
+        for (let gy = 0; gy < gridSize; gy++) {
+            for (let gx = 0; gx < gridSize; gx++) {
+                let sum = 0;
+                for (let y = gy * block; y < (gy + 1) * block; y++) {
+                    for (let x = gx * block; x < (gx + 1) * block; x++) {
+                        sum += src[(y * 280 + x) * 4];
+                    }
+                }
+                grid[gy][gx] = (sum / (block * block * 255)) > 0.16 ? 1 : 0;
+            }
+        }
 
-        // Assign pseudo-probabilities based on features
-        scores[0] = 0.1 + (verticalSymmetry < 0.1 ? 0.3 : 0) + (centerHeavy < 0.15 ? 0.2 : 0);
-        scores[1] = 0.1 + (count < 800 ? 0.4 : 0) + (verticalSymmetry > 0.2 ? 0.2 : 0);
-        scores[2] = 0.1 + (topHeavy > 1.2 ? 0.2 : 0);
-        scores[3] = 0.1 + (horizontalLine > 0.4 ? 0.2 : 0);
-        scores[4] = 0.1 + (norm[1] < 0.05 ? 0.2 : 0);
-        scores[5] = 0.1 + (topHeavy < 0.8 ? 0.2 : 0);
-        scores[6] = 0.1 + (norm[6] > 0.15 ? 0.2 : 0);
-        scores[7] = 0.1 + (count < 1000 ? 0.2 : 0) + (topHeavy > 1.0 ? 0.15 : 0);
-        scores[8] = 0.1 + (verticalSymmetry < 0.05 ? 0.3 : 0) + (centerHeavy > 0.2 ? 0.15 : 0);
-        scores[9] = 0.1 + (norm[7] > 0.1 ? 0.15 : 0);
+        let minX = gridSize, minY = gridSize, maxX = -1, maxY = -1;
+        let total = 0;
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                if (!grid[y][x]) continue;
+                total++;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
 
-        // Add randomness
-        scores.forEach((s, i) => scores[i] = s + Math.random() * 0.15);
+        if (total < 12) return null;
 
-        // Softmax normalization
+        const width = maxX - minX + 1;
+        const height = maxY - minY + 1;
+        const area = width * height;
+        const aspect = width / Math.max(height, 1);
+        const density = total / Math.max(area, 1);
+
+        const regions = new Array(9).fill(0);
+        let left = 0, midCol = 0, right = 0;
+        let top = 0, midRow = 0, bottom = 0;
+
+        for (let y = minY; y <= maxY; y++) {
+            for (let x = minX; x <= maxX; x++) {
+                if (!grid[y][x]) continue;
+                const nx = (x - minX) / Math.max(width - 1, 1);
+                const ny = (y - minY) / Math.max(height - 1, 1);
+                const gx = Math.min(Math.floor(nx * 3), 2);
+                const gy = Math.min(Math.floor(ny * 3), 2);
+                regions[gy * 3 + gx] += 1;
+
+                if (nx < 0.33) left++;
+                else if (nx < 0.66) midCol++;
+                else right++;
+
+                if (ny < 0.33) top++;
+                else if (ny < 0.66) midRow++;
+                else bottom++;
+            }
+        }
+
+        const normalize = (v) => v / Math.max(total, 1);
+        const normRegions = regions.map(normalize);
+        const holeCount = this.countDigitHoles(grid, minX, minY, maxX, maxY);
+
+        return {
+            aspect,
+            density,
+            holes: holeCount,
+            regions: normRegions,
+            top: normalize(top),
+            middle: normalize(midRow),
+            bottom: normalize(bottom),
+            left: normalize(left),
+            center: normalize(midCol),
+            right: normalize(right)
+        };
+    },
+
+    countDigitHoles(grid, minX, minY, maxX, maxY) {
+        const w = (maxX - minX + 1) + 2;
+        const h = (maxY - minY + 1) + 2;
+        const bg = Array.from({ length: h }, () => new Array(w).fill(0));
+        const seen = Array.from({ length: h }, () => new Array(w).fill(false));
+
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const gx = minX + x - 1;
+                const gy = minY + y - 1;
+                const outside = gx < minX || gx > maxX || gy < minY || gy > maxY;
+                bg[y][x] = outside ? 1 : (grid[gy][gx] ? 0 : 1);
+            }
+        }
+
+        const q = [[0, 0]];
+        seen[0][0] = true;
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+        while (q.length) {
+            const [x, y] = q.pop();
+            for (const [dx, dy] of dirs) {
+                const nx = x + dx, ny = y + dy;
+                if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+                if (seen[ny][nx] || bg[ny][nx] === 0) continue;
+                seen[ny][nx] = true;
+                q.push([nx, ny]);
+            }
+        }
+
+        let holes = 0;
+        for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+                if (bg[y][x] === 0 || seen[y][x]) continue;
+                holes++;
+                const stack = [[x, y]];
+                seen[y][x] = true;
+                while (stack.length) {
+                    const [cx, cy] = stack.pop();
+                    for (const [dx, dy] of dirs) {
+                        const nx = cx + dx, ny = cy + dy;
+                        if (nx <= 0 || ny <= 0 || nx >= w - 1 || ny >= h - 1) continue;
+                        if (seen[ny][nx] || bg[ny][nx] === 0) continue;
+                        seen[ny][nx] = true;
+                        stack.push([nx, ny]);
+                    }
+                }
+            }
+        }
+        return holes;
+    },
+
+    scoreHit(condition, weight) {
+        return condition ? weight : 0;
+    },
+
+    generatePrediction(features) {
+        const r = features.regions;
+        const scores = new Array(10).fill(0.05);
+
+        const topRow = r[0] + r[1] + r[2];
+        const midRow = r[3] + r[4] + r[5];
+        const bottomRow = r[6] + r[7] + r[8];
+        const leftCol = r[0] + r[3] + r[6];
+        const rightCol = r[2] + r[5] + r[8];
+        const centerMass = r[4];
+
+        // 0
+        scores[0] += this.scoreHit(features.holes >= 1, 0.9);
+        scores[0] += this.scoreHit(centerMass < 0.17, 0.25);
+        scores[0] += this.scoreHit(Math.abs(leftCol - rightCol) < 0.16, 0.25);
+        scores[0] += this.scoreHit(Math.abs(topRow - bottomRow) < 0.18, 0.15);
+
+        // 1
+        scores[1] += this.scoreHit(features.aspect < 0.55, 0.8);
+        scores[1] += this.scoreHit(features.center > 0.42, 0.4);
+        scores[1] += this.scoreHit(features.holes === 0, 0.15);
+
+        // 2
+        scores[2] += this.scoreHit(topRow > 0.33 && bottomRow > 0.28, 0.45);
+        scores[2] += this.scoreHit(rightCol > leftCol, 0.25);
+        scores[2] += this.scoreHit(features.holes === 0, 0.2);
+        scores[2] += this.scoreHit(midRow > 0.2, 0.2);
+
+        // 3
+        scores[3] += this.scoreHit(topRow > 0.28 && bottomRow > 0.24, 0.35);
+        scores[3] += this.scoreHit(rightCol > leftCol + 0.08, 0.5);
+        scores[3] += this.scoreHit(features.holes === 0, 0.2);
+        scores[3] += this.scoreHit(midRow > 0.2, 0.2);
+
+        // 4
+        scores[4] += this.scoreHit(midRow > 0.28, 0.45);
+        scores[4] += this.scoreHit(rightCol > 0.34, 0.35);
+        scores[4] += this.scoreHit(r[0] > 0.08 || r[3] > 0.1, 0.2);
+        scores[4] += this.scoreHit(bottomRow < 0.3, 0.15);
+
+        // 5
+        scores[5] += this.scoreHit(topRow > 0.3 && bottomRow > 0.24, 0.4);
+        scores[5] += this.scoreHit(leftCol > rightCol * 0.8, 0.25);
+        scores[5] += this.scoreHit(midRow > 0.18, 0.2);
+        scores[5] += this.scoreHit(features.holes === 0, 0.2);
+
+        // 6
+        scores[6] += this.scoreHit(features.holes >= 1, 0.5);
+        scores[6] += this.scoreHit(leftCol > rightCol * 0.9, 0.25);
+        scores[6] += this.scoreHit(bottomRow > topRow, 0.25);
+        scores[6] += this.scoreHit(r[6] > r[2], 0.2);
+
+        // 7
+        scores[7] += this.scoreHit(topRow > 0.36, 0.65);
+        scores[7] += this.scoreHit(features.holes === 0, 0.2);
+        scores[7] += this.scoreHit(rightCol > leftCol + 0.08, 0.4);
+        scores[7] += this.scoreHit(bottomRow < 0.28, 0.25);
+        scores[7] += this.scoreHit(r[0] > 0.08 && r[8] > 0.06, 0.2);
+
+        // 8
+        scores[8] += this.scoreHit(features.holes >= 2, 1.2);
+        scores[8] += this.scoreHit(features.holes === 1, 0.35);
+        scores[8] += this.scoreHit(centerMass > 0.15, 0.25);
+        scores[8] += this.scoreHit(Math.abs(leftCol - rightCol) < 0.12, 0.2);
+
+        // 9
+        scores[9] += this.scoreHit(features.holes >= 1, 0.55);
+        scores[9] += this.scoreHit(topRow > bottomRow, 0.3);
+        scores[9] += this.scoreHit(rightCol > leftCol, 0.3);
+        scores[9] += this.scoreHit(r[2] > r[6], 0.2);
+
+        // Normalize with softmax for percentage-style confidence output
         const maxS = Math.max(...scores);
-        const expScores = scores.map(s => Math.exp((s - maxS) * 5));
+        const expScores = scores.map((s) => Math.exp((s - maxS) * 3.5));
         const sumExp = expScores.reduce((a, b) => a + b, 0);
-        return expScores.map(s => s / sumExp);
+        return expScores.map((s) => s / sumExp);
     },
 
     // ---- Quiz 1.1 ----
