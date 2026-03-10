@@ -35,6 +35,8 @@ const Chapter15 = {
     futureAnimStep: 0,
     futureTopics: [],
     futureHover: -1,
+    certificationStorageKey: 'dl-final-certification',
+    finalQuizPassPercent: 80,
 
     init() {
         App.registerChapter('15-1', () => this.loadChapter15_1());
@@ -1388,5 +1390,259 @@ model, optimizer, _, _ = deepspeed.initialize(
         });
     },
 
-    // PART 2 CONTINUES HERE
+    loadChapter15_3() {
+        const container = document.getElementById('chapter-15-3');
+        container.innerHTML = `
+            <div class="chapter-header">
+                <span class="chapter-badge">Module 15 &bull; Chapter 15.3</span>
+                <h1>Inference Engines</h1>
+                <p class="chapter-subtitle">How production systems serve LLM responses quickly and reliably.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u26A1</span> Core Ideas</h2>
+                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.9;">
+                    <li><strong style="color: var(--text-primary);">KV Cache:</strong> Reuse past attention state to avoid recomputing every token.</li>
+                    <li><strong style="color: var(--text-primary);">Continuous Batching:</strong> Merge requests dynamically for high throughput.</li>
+                    <li><strong style="color: var(--text-primary);">Speculative Decoding:</strong> Draft + verify tokens to reduce latency.</li>
+                    <li><strong style="color: var(--text-primary);">Scheduling:</strong> Balance latency (single user) and throughput (many users).</li>
+                </ul>
+            </div>
+
+            <div class="chapter-nav">
+                <button class="btn-secondary" onclick="App.navigateTo('15-2')">\u2190 Previous</button>
+                <button class="btn-primary" onclick="App.navigateTo('15-4')">Next: External Memory \u2192</button>
+            </div>
+        `;
+    },
+
+    loadChapter15_4() {
+        const container = document.getElementById('chapter-15-4');
+        container.innerHTML = `
+            <div class="chapter-header">
+                <span class="chapter-badge">Module 15 &bull; Chapter 15.4</span>
+                <h1>External Memory</h1>
+                <p class="chapter-subtitle">Grounding LLMs with retrieval systems for factual and up-to-date answers.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F4DA}</span> RAG Memory Pipeline</h2>
+                <ol style="color: var(--text-secondary); padding-left: 20px; line-height: 1.9;">
+                    <li>Split documents into chunks.</li>
+                    <li>Create embeddings for each chunk.</li>
+                    <li>Store in a vector database.</li>
+                    <li>Retrieve top-k chunks for each question.</li>
+                    <li>Generate answer using retrieved context.</li>
+                </ol>
+                <div class="info-box">
+                    <span class="info-box-icon">\u{1F4A1}</span>
+                    <span class="info-box-text">External memory is key to reducing hallucinations and keeping responses aligned with your source documents.</span>
+                </div>
+            </div>
+
+            <div class="chapter-nav">
+                <button class="btn-secondary" onclick="App.navigateTo('15-3')">\u2190 Previous</button>
+                <button class="btn-primary" onclick="App.navigateTo('15-5')">Next: Final Certification \u2192</button>
+            </div>
+        `;
+    },
+
+    loadChapter15_5() {
+        const container = document.getElementById('chapter-15-5');
+        container.innerHTML = `
+            <div class="chapter-header">
+                <span class="chapter-badge">Module 15 &bull; Chapter 15.5</span>
+                <h1>Final Certification Exam</h1>
+                <p class="chapter-subtitle">Pass the final quiz with <strong>${this.finalQuizPassPercent}%+</strong> and claim your certificate.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F4DD}</span> Certification Rules</h2>
+                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.9;">
+                    <li>Final quiz has 10 questions from across the tutorial.</li>
+                    <li>Pass mark is <strong style="color: var(--text-primary);">${this.finalQuizPassPercent}%</strong> or higher.</li>
+                    <li>To generate a certificate, sign in with Google via Clerk.</li>
+                </ul>
+                <div class="controls" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+                    <button class="btn-secondary" onclick="Chapter15.signInWithClerkGoogle()">Sign in with Google (Clerk)</button>
+                    <button class="btn-primary" onclick="Chapter15.startFinalCertificationQuiz()">Start Final Quiz</button>
+                </div>
+                <p id="certAuthStatus" style="margin-top:10px;color:var(--text-secondary);font-size:13px;"></p>
+            </div>
+
+            <div class="section hidden" id="certificateSection">
+                <h2><span class="section-icon">\u{1F393}</span> Your Certificate</h2>
+                <div class="info-box success">
+                    <span class="info-box-icon">\u{1F389}</span>
+                    <span class="info-box-text" id="certificateText"></span>
+                </div>
+                <div class="controls" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+                    <button class="btn-secondary" onclick="Chapter15.downloadCertificate()">Download Certificate</button>
+                </div>
+            </div>
+
+            <div class="chapter-nav">
+                <button class="btn-secondary" onclick="App.navigateTo('15-4')">\u2190 Previous</button>
+                <button class="btn-primary" onclick="App.navigateTo('1-1')">Back to Start</button>
+            </div>
+        `;
+
+        this.refreshCertificationUI();
+    },
+
+    async signInWithClerkGoogle() {
+        const key = window.CLERK_PUBLISHABLE_KEY;
+        if (!window.Clerk || !key) {
+            App.showToast('Clerk not configured', 'Set window.CLERK_PUBLISHABLE_KEY in index.html to enable Google login.');
+            this.refreshCertificationUI();
+            return;
+        }
+
+        try {
+            if (!window.Clerk.loaded) {
+                await window.Clerk.load({ publishableKey: key });
+            }
+
+            if (window.Clerk.user) {
+                this.refreshCertificationUI();
+                return;
+            }
+
+            if (typeof window.Clerk.openSignIn === 'function') {
+                window.Clerk.openSignIn();
+            } else {
+                window.Clerk.redirectToSignIn();
+            }
+        } catch (err) {
+            console.warn('Clerk sign-in error:', err);
+            App.showToast('Login error', 'Could not start Clerk sign-in flow.');
+        }
+    },
+
+    async getClerkUser() {
+        const key = window.CLERK_PUBLISHABLE_KEY;
+        if (!window.Clerk || !key) return null;
+
+        try {
+            if (!window.Clerk.loaded) {
+                await window.Clerk.load({ publishableKey: key });
+            }
+            return window.Clerk.user || null;
+        } catch (err) {
+            console.warn('Clerk load error:', err);
+            return null;
+        }
+    },
+
+    async refreshCertificationUI() {
+        const status = document.getElementById('certAuthStatus');
+        if (!status) return;
+
+        const user = await this.getClerkUser();
+        if (user) {
+            const name = user.fullName || user.firstName || user.primaryEmailAddress?.emailAddress || 'Learner';
+            status.textContent = `Signed in as ${name}.`;
+            status.style.color = 'var(--success)';
+        } else if (window.CLERK_PUBLISHABLE_KEY) {
+            status.textContent = 'Not signed in. Sign in with Google to unlock certificate generation.';
+            status.style.color = 'var(--warning)';
+        } else {
+            status.textContent = 'Clerk is not configured yet. Add a publishable key to enable Google login.';
+            status.style.color = 'var(--text-secondary)';
+        }
+
+        const cert = this.getSavedCertificate();
+        const certSection = document.getElementById('certificateSection');
+        const certText = document.getElementById('certificateText');
+        if (cert && certSection && certText) {
+            certSection.classList.remove('hidden');
+            certText.textContent = `${cert.name} passed the Final Certification Exam with ${cert.percent}% on ${new Date(cert.issuedAt).toLocaleDateString()}.`;
+        }
+    },
+
+    startFinalCertificationQuiz() {
+        Quiz.start({
+            title: 'Final Certification Exam',
+            chapterId: '15-5',
+            passPercent: this.finalQuizPassPercent,
+            disableProgressTracking: true,
+            onFinish: (result) => this.handleFinalCertificationResult(result),
+            questions: [
+                { question: 'What does quantization primarily reduce?', options: ['Model memory footprint', 'Training data size', 'Number of layers', 'Prompt length'], correct: 0, explanation: 'Quantization reduces weight precision, which cuts memory usage.' },
+                { question: 'In data parallel training, each GPU typically has:', options: ['Different model architecture', 'A full model copy with different mini-batches', 'Only optimizer states', 'Only one layer'], correct: 1, explanation: 'Data parallelism replicates the model and splits data batches.' },
+                { question: 'Which method protects important weights during low-bit quantization?', options: ['GGUF', 'AWQ', 'Dropout', 'AdamW'], correct: 1, explanation: 'AWQ is activation-aware and preserves critical weights.' },
+                { question: 'What is the role of KV cache during inference?', options: ['Store user passwords', 'Speed up autoregressive decoding', 'Compress training dataset', 'Increase token limit automatically'], correct: 1, explanation: 'KV cache avoids recomputing past attention states.' },
+                { question: 'RAG mainly helps with:', options: ['GPU overclocking', 'Reducing hallucinations with retrieved context', 'Replacing tokenization', 'Removing attention'], correct: 1, explanation: 'RAG grounds generation with relevant retrieved documents.' },
+                { question: 'Softmax output is best interpreted as:', options: ['Learning rate schedule', 'Normalized confidence-like probabilities', 'Backprop graph', 'Gradient clipping value'], correct: 1, explanation: 'Softmax transforms logits into normalized probabilities.' },
+                { question: 'Which metric pair is most useful for imbalanced classification?', options: ['Precision and Recall', 'FPS and latency', 'BLEU and ROUGE', 'MSE and MAE'], correct: 0, explanation: 'Precision/Recall better capture imbalance behavior.' },
+                { question: 'Speculative decoding improves latency by:', options: ['Increasing model size', 'Drafting tokens then verifying quickly', 'Disabling cache', 'Using only CPU'], correct: 1, explanation: 'A small draft model proposes tokens and a larger model verifies.' },
+                { question: 'A pass in this final exam requires at least:', options: ['60%', '70%', '80%', '90%'], correct: 2, explanation: `This certification requires ${this.finalQuizPassPercent}% or higher.` },
+                { question: 'Before issuing a certificate in this app, the learner must:', options: ['Submit phone number', 'Sign in via Clerk Google login', 'Install Python', 'Buy a subscription'], correct: 1, explanation: 'Certificate issuance is gated by Clerk-based login.' }
+            ]
+        });
+    },
+
+    async handleFinalCertificationResult(result) {
+        if (!result.passed) {
+            App.showToast('Not passed yet', `You need ${this.finalQuizPassPercent}% or higher for certification.`);
+            return;
+        }
+
+        const user = await this.getClerkUser();
+        if (!user) {
+            App.showToast('Login required', 'Please sign in with Google (Clerk), then retake or reopen the final exam to issue certificate.');
+            this.refreshCertificationUI();
+            return;
+        }
+
+        const name = user.fullName || user.firstName || user.primaryEmailAddress?.emailAddress || 'Learner';
+        const cert = {
+            name,
+            percent: result.percent,
+            score: result.score,
+            total: result.total,
+            issuedAt: Date.now()
+        };
+
+        localStorage.setItem(this.certificationStorageKey, JSON.stringify(cert));
+        App.showToast('Certificate unlocked', `Congratulations ${name}!`);
+        this.refreshCertificationUI();
+    },
+
+    getSavedCertificate() {
+        try {
+            const raw = localStorage.getItem(this.certificationStorageKey);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    downloadCertificate() {
+        const cert = this.getSavedCertificate();
+        if (!cert) {
+            App.showToast('No certificate', 'Pass the final exam and login first.');
+            return;
+        }
+
+        const content = [
+            'Deep Learning Interactive Tutorial - Certificate of Completion',
+            '',
+            `Awarded to: ${cert.name}`,
+            `Score: ${cert.score}/${cert.total} (${cert.percent}%)`,
+            `Issued on: ${new Date(cert.issuedAt).toLocaleDateString()}`,
+            '',
+            'This certifies successful completion of the final exam (80%+ pass mark).'
+        ].join('\n');
+
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'deep-learning-certificate.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 };

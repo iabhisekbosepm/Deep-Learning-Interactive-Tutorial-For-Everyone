@@ -475,6 +475,11 @@
     </footer>
 
     <!-- Scripts -->
+    <script>
+        // Set this to your Clerk publishable key to enable Google login for certification.
+        window.CLERK_PUBLISHABLE_KEY = window.CLERK_PUBLISHABLE_KEY || 'pk_test_cG9ldGljLWxhcmstOTkuY2xlcmsuYWNjb3VudHMuZGV2JA';
+    </script>
+    <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
     <script src="js/app.js"></script>
     <script src="js/quiz.js"></script>
     <script src="js/chapter1.js"></script>

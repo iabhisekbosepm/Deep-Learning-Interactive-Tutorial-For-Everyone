@@ -104,11 +104,16 @@ const Quiz = {
         const total = this.currentQuiz.questions.length;
         const percent = Math.round((this.score / total) * 100);
         const chapterId = this.currentQuiz.chapterId;
+        const passPercent = this.currentQuiz.passPercent ?? 60;
+        const trackProgress = this.currentQuiz.disableProgressTracking !== true;
 
-        // Use the new completeQuiz API which handles XP, deduplication, and achievements
-        const result = App.completeQuiz(chapterId, this.score, total);
+        // Use the chapter progress API unless quiz opts out (e.g., final certification)
+        let result = { xpAwarded: 0, isNewBest: true, prevBest: 0 };
+        if (trackProgress && chapterId) {
+            result = App.completeQuiz(chapterId, this.score, total);
+        }
 
-        const passed = percent >= 60;
+        const passed = percent >= passPercent;
         const statusIcon = passed ? '\uD83C\uDF89' : '\uD83D\uDCAA';
         const statusText = passed ? 'Quiz Passed!' : 'Keep Practicing!';
         const statusColor = passed ? 'var(--success)' : 'var(--warning)';
@@ -136,9 +141,19 @@ const Quiz = {
                 <p style="color: ${statusColor}; font-weight: 600;">${statusText} (${percent}%)</p>
                 ${xpBreakdown}
                 ${retakeNote}
-                ${!passed ? '<p style="color: var(--text-secondary); font-size: 12px; margin-top: 8px;">Score 60% or higher to complete this chapter!</p>' : ''}
+                ${!passed ? `<p style="color: var(--text-secondary); font-size: 12px; margin-top: 8px;">Score ${passPercent}% or higher to pass this quiz.</p>` : ''}
             </div>
         `;
+
+        if (typeof this.currentQuiz.onFinish === 'function') {
+            this.currentQuiz.onFinish({
+                chapterId,
+                score: this.score,
+                total,
+                percent,
+                passed
+            });
+        }
 
         document.getElementById('quizSubmit').classList.add('hidden');
         document.getElementById('quizNext').textContent = 'Close';
