@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning Interactive Tutorial - That's all you need to know</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">&#x1F9E0;</span>
+                <span class="logo-text">DLIT</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <div class="progress-overview">
+            <div class="progress-label">
+                <span>Overall Progress</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="xp-display">
+                <span class="xp-icon">&#x2B50;</span>
+                <span id="xpCount">0</span> XP
+            </div>
+            <div class="xp-display" style="margin-top: 4px;">
+                <span class="xp-icon">&#x1F3C6;</span>
+                <span id="achievementCount">0/20</span> Achievements
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-section">Module 1: Foundation</li>
+            <li class="nav-item active" data-chapter="1-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">1.1 Hello Neural Networks</span>
+            </li>
+            <li class="nav-item" data-chapter="1-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">1.2 Fashion Detective</span>
+            </li>
+
+            <li class="nav-section">Module 2: Math Behind the Magic</li>
+            <li class="nav-item" data-chapter="2-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">2.1 Activation Functions</span>
+            </li>
+            <li class="nav-item" data-chapter="2-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">2.2 Derivatives</span>
+            </li>
+            <li class="nav-item" data-chapter="2-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">2.3 Matrix Math</span>
+            </li>
+            <li class="nav-item" data-chapter="2-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">2.4 Loss Functions</span>
+            </li>
+            <li class="nav-item" data-chapter="2-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">2.5 Gradient Descent</span>
+            </li>
+
+            <li class="nav-section">Module 3: Building From Scratch</li>
+            <li class="nav-item" data-chapter="3-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">3.1 NN From Scratch</span>
+            </li>
+            <li class="nav-item" data-chapter="3-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">3.2 SGD vs GD Battle</span>
+            </li>
+
+            <li class="nav-section">Module 4: Training & Monitoring</li>
+            <li class="nav-item" data-chapter="4-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">4.1 TensorBoard Dashboard</span>
+            </li>
+            <li class="nav-item" data-chapter="4-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">4.2 GPU Speed Boost</span>
+            </li>
+
+            <li class="nav-section">Module 5: Evaluation & Metrics</li>
+            <li class="nav-item" data-chapter="5-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">5.1 Precision & Recall</span>
+            </li>
+            <li class="nav-item" data-chapter="5-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">5.2 Dropout & Regularization</span>
+            </li>
+            <li class="nav-item" data-chapter="5-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">5.3 Imbalanced Data</span>
+            </li>
+            <li class="nav-item" data-chapter="5-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">5.4 Churn Prediction</span>
+            </li>
+
+            <li class="nav-section">Module 6: Computer Vision</li>
+            <li class="nav-item" data-chapter="6-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">6.1 Convolutional Networks</span>
+            </li>
+            <li class="nav-item" data-chapter="6-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">6.2 Data Augmentation</span>
+            </li>
+            <li class="nav-item" data-chapter="6-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">6.3 Transfer Learning</span>
+            </li>
+
+            <li class="nav-section">Module 7: NLP</li>
+            <li class="nav-item" data-chapter="7-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">7.1 Word Embeddings</span>
+            </li>
+            <li class="nav-item" data-chapter="7-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">7.2 Word2Vec</span>
+            </li>
+            <li class="nav-item" data-chapter="7-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">7.3 RNN Text Classification</span>
+            </li>
+
+            <li class="nav-section">Module 8: Advanced</li>
+            <li class="nav-item" data-chapter="8-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">8.1 Distributed Training</span>
+            </li>
+            <li class="nav-item" data-chapter="8-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">8.2 Data Pipelines</span>
+            </li>
+            <li class="nav-item" data-chapter="8-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">8.3 BERT & Transformers</span>
+            </li>
+            <li class="nav-item" data-chapter="8-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">8.4 Model Deployment</span>
+            </li>
+            <li class="nav-item" data-chapter="8-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">8.5 Model Optimization</span>
+            </li>
+
+            <li class="nav-section">Module 9: Transformers</li>
+            <li class="nav-item" data-chapter="9-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">9.1 Transformer Architecture</span>
+            </li>
+            <li class="nav-item" data-chapter="9-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">9.2 Tokenization & Encoding</span>
+            </li>
+            <li class="nav-item" data-chapter="9-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">9.3 Self-Attention Deep Dive</span>
+            </li>
+            <li class="nav-item" data-chapter="9-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">9.4 GPT & Text Generation</span>
+            </li>
+            <li class="nav-item" data-chapter="9-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">9.5 Vision Transformers</span>
+            </li>
+            <li class="nav-section">Module 10: LLMs & Scaling</li>
+            <li class="nav-item" data-chapter="10-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">10.1 GPT Revolution & Scaling</span>
+            </li>
+            <li class="nav-item" data-chapter="10-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">10.2 In-Context Learning</span>
+            </li>
+            <li class="nav-item" data-chapter="10-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">10.3 Chain-of-Thought</span>
+            </li>
+            <li class="nav-item" data-chapter="10-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">10.4 RLHF & Instruction</span>
+            </li>
+            <li class="nav-item" data-chapter="10-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">10.5 Advanced Alignment</span>
+            </li>
+
+            <li class="nav-section">Module 11: Generative AI & Multimodal</li>
+            <li class="nav-item" data-chapter="11-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">11.1 Diffusion Models</span>
+            </li>
+            <li class="nav-item" data-chapter="11-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">11.2 Text-to-Image</span>
+            </li>
+            <li class="nav-item" data-chapter="11-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">11.3 Vision-Language Models</span>
+            </li>
+            <li class="nav-item" data-chapter="11-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">11.4 Text-to-Video & Audio</span>
+            </li>
+            <li class="nav-item" data-chapter="11-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">11.5 Multimodal Foundation</span>
+            </li>
+
+            <li class="nav-section">Module 12: Frontier & Emerging</li>
+            <li class="nav-item" data-chapter="12-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">12.1 State Space Models</span>
+            </li>
+            <li class="nav-item" data-chapter="12-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">12.2 Mixture of Experts</span>
+            </li>
+            <li class="nav-item" data-chapter="12-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">12.3 Efficient Fine-Tuning</span>
+            </li>
+            <li class="nav-item" data-chapter="12-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">12.4 RAG Systems</span>
+            </li>
+            <li class="nav-item" data-chapter="12-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">12.5 AI Agents</span>
+            </li>
+
+            <li class="nav-section">Module 13: Attention & Memory</li>
+            <li class="nav-item" data-chapter="13-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">13.1 FlashAttention</span>
+            </li>
+            <li class="nav-item" data-chapter="13-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">13.2 Sparse Attention & DSA</span>
+            </li>
+            <li class="nav-item" data-chapter="13-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">13.3 Multi-Head Latent Attention</span>
+            </li>
+            <li class="nav-item" data-chapter="13-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">13.4 KV Cache & Paged Attention</span>
+            </li>
+            <li class="nav-item" data-chapter="13-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">13.5 Speculative Decoding</span>
+            </li>
+
+            <li class="nav-section">Module 14: Reasoning & Training</li>
+            <li class="nav-item" data-chapter="14-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">14.1 Reasoning & Thinking Tokens</span>
+            </li>
+            <li class="nav-item" data-chapter="14-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">14.2 Process Rewards & GRPO</span>
+            </li>
+            <li class="nav-item" data-chapter="14-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">14.3 Tree of Thought</span>
+            </li>
+            <li class="nav-item" data-chapter="14-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">14.4 Synthetic Data & Self-Play</span>
+            </li>
+            <li class="nav-item" data-chapter="14-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">14.5 DeepSeek & RAGEN</span>
+            </li>
+
+            <li class="nav-section">Module 15: Production LLM Systems</li>
+            <li class="nav-item" data-chapter="15-1">
+                <span class="nav-status"></span>
+                <span class="nav-label">15.1 Quantization Deep Dive</span>
+            </li>
+            <li class="nav-item" data-chapter="15-2">
+                <span class="nav-status"></span>
+                <span class="nav-label">15.2 Distributed Training</span>
+            </li>
+            <li class="nav-item" data-chapter="15-3">
+                <span class="nav-status"></span>
+                <span class="nav-label">15.3 Inference Engines</span>
+            </li>
+            <li class="nav-item" data-chapter="15-4">
+                <span class="nav-status"></span>
+                <span class="nav-label">15.4 External Memory</span>
+            </li>
+            <li class="nav-item" data-chapter="15-5">
+                <span class="nav-status"></span>
+                <span class="nav-label">15.5 Frontier & Future</span>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content" id="content">
+        <!-- Welcome Screen -->
+        <div id="welcome" class="chapter-container active">
+            <div class="welcome-hero">
+                <h1>Welcome to <span class="gradient-text">Deep Learning Interactive Tutorial - That's all you need to know</span></h1>
+                <p class="subtitle">An interactive journey from neurons to neural networks</p>
+                <div class="welcome-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#x1F3AE;</div>
+                        <h3>Interactive</h3>
+                        <p>Learn by doing with hands-on demos</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">&#x1F4CA;</div>
+                        <h3>Visual</h3>
+                        <p>See algorithms come alive</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">&#x1F3C6;</div>
+                        <h3>Gamified</h3>
+                        <p>Earn XP, badges & certificates</p>
+                    </div>
+                </div>
+                <button class="btn-primary btn-large" onclick="App.navigateTo('1-1')">
+                    Start Learning &#x2192;
+                </button>
+            </div>
+        </div>
+
+        <!-- Chapter containers will be populated by JS -->
+        <div id="chapter-1-1" class="chapter-container"></div>
+        <div id="chapter-1-2" class="chapter-container"></div>
+        <div id="chapter-2-1" class="chapter-container"></div>
+        <div id="chapter-2-2" class="chapter-container"></div>
+        <div id="chapter-2-3" class="chapter-container"></div>
+        <div id="chapter-2-4" class="chapter-container"></div>
+        <div id="chapter-2-5" class="chapter-container"></div>
+        <div id="chapter-3-1" class="chapter-container"></div>
+        <div id="chapter-3-2" class="chapter-container"></div>
+        <div id="chapter-4-1" class="chapter-container"></div>
+        <div id="chapter-4-2" class="chapter-container"></div>
+        <div id="chapter-5-1" class="chapter-container"></div>
+        <div id="chapter-5-2" class="chapter-container"></div>
+        <div id="chapter-5-3" class="chapter-container"></div>
+        <div id="chapter-5-4" class="chapter-container"></div>
+        <div id="chapter-6-1" class="chapter-container"></div>
+        <div id="chapter-6-2" class="chapter-container"></div>
+        <div id="chapter-6-3" class="chapter-container"></div>
+        <div id="chapter-7-1" class="chapter-container"></div>
+        <div id="chapter-7-2" class="chapter-container"></div>
+        <div id="chapter-7-3" class="chapter-container"></div>
+        <div id="chapter-8-1" class="chapter-container"></div>
+        <div id="chapter-8-2" class="chapter-container"></div>
+        <div id="chapter-8-3" class="chapter-container"></div>
+        <div id="chapter-8-4" class="chapter-container"></div>
+        <div id="chapter-8-5" class="chapter-container"></div>
+        <div id="chapter-9-1" class="chapter-container"></div>
+        <div id="chapter-9-2" class="chapter-container"></div>
+        <div id="chapter-9-3" class="chapter-container"></div>
+        <div id="chapter-9-4" class="chapter-container"></div>
+        <div id="chapter-9-5" class="chapter-container"></div>
+        <div id="chapter-10-1" class="chapter-container"></div>
+        <div id="chapter-10-2" class="chapter-container"></div>
+        <div id="chapter-10-3" class="chapter-container"></div>
+        <div id="chapter-10-4" class="chapter-container"></div>
+        <div id="chapter-10-5" class="chapter-container"></div>
+        <div id="chapter-11-1" class="chapter-container"></div>
+        <div id="chapter-11-2" class="chapter-container"></div>
+        <div id="chapter-11-3" class="chapter-container"></div>
+        <div id="chapter-11-4" class="chapter-container"></div>
+        <div id="chapter-11-5" class="chapter-container"></div>
+        <div id="chapter-12-1" class="chapter-container"></div>
+        <div id="chapter-12-2" class="chapter-container"></div>
+        <div id="chapter-12-3" class="chapter-container"></div>
+        <div id="chapter-12-4" class="chapter-container"></div>
+        <div id="chapter-12-5" class="chapter-container"></div>
+        <div id="chapter-13-1" class="chapter-container"></div>
+        <div id="chapter-13-2" class="chapter-container"></div>
+        <div id="chapter-13-3" class="chapter-container"></div>
+        <div id="chapter-13-4" class="chapter-container"></div>
+        <div id="chapter-13-5" class="chapter-container"></div>
+        <div id="chapter-14-1" class="chapter-container"></div>
+        <div id="chapter-14-2" class="chapter-container"></div>
+        <div id="chapter-14-3" class="chapter-container"></div>
+        <div id="chapter-14-4" class="chapter-container"></div>
+        <div id="chapter-14-5" class="chapter-container"></div>
+        <div id="chapter-15-1" class="chapter-container"></div>
+        <div id="chapter-15-2" class="chapter-container"></div>
+        <div id="chapter-15-3" class="chapter-container"></div>
+        <div id="chapter-15-4" class="chapter-container"></div>
+        <div id="chapter-15-5" class="chapter-container"></div>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div class="modal-overlay" id="quizModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="quizTitle">Quiz</h2>
+                <span class="quiz-progress" id="quizProgress">1/5</span>
+            </div>
+            <div class="modal-body" id="quizBody"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="quizSkip" onclick="Quiz.skip()">Skip</button>
+                <button class="btn-primary" id="quizSubmit" onclick="Quiz.submit()">Check Answer</button>
+                <button class="btn-primary hidden" id="quizNext" onclick="Quiz.next()">Next &#x2192;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Toast -->
+    <div class="toast" id="achievementToast">
+        <div class="toast-icon">&#x1F3C6;</div>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle">Achievement Unlocked!</div>
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/chapter1.js"></script>
+    <script src="js/chapter2.js"></script>
+    <script src="js/chapter3.js"></script>
+    <script src="js/chapter4.js"></script>
+    <script src="js/chapter5.js"></script>
+    <script src="js/chapter6.js"></script>
+    <script src="js/chapter7.js"></script>
+    <script src="js/chapter8.js"></script>
+    <script src="js/chapter9.js"></script>
+    <script src="js/chapter10.js"></script>
+    <script src="js/chapter11.js"></script>
+    <script src="js/chapter12.js"></script>
+    <script src="js/chapter13.js"></script>
+    <script src="js/chapter14.js"></script>
+    <script src="js/chapter15.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>
