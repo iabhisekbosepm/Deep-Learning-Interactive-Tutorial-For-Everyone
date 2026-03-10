@@ -1461,10 +1461,11 @@ model, optimizer, _, _ = deepspeed.initialize(
                 <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.9;">
                     <li>Final quiz has 10 questions from across the tutorial.</li>
                     <li>Pass mark is <strong style="color: var(--text-primary);">${this.finalQuizPassPercent}%</strong> or higher.</li>
-                    <li>To generate a certificate, sign in with Google via Clerk.</li>
+                    <li>To generate a certificate, sign in with Google.</li>
                 </ul>
                 <div class="controls" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-                    <button class="btn-secondary" onclick="Chapter15.signInWithClerkGoogle()">Sign in with Google (Clerk)</button>
+                    <!-- <button class="btn-secondary" onclick="Chapter15.signInWithClerkGoogle()">Sign in with Google</button> -->
+                    <button class="btn-secondary" onclick="App.showToast('Coming soon', 'Google sign-in flow is coming soon.')">Sign in with Google</button>
                     <button class="btn-primary" onclick="Chapter15.startFinalCertificationQuiz()">Start Final Quiz</button>
                 </div>
                 <p id="certAuthStatus" style="margin-top:10px;color:var(--text-secondary);font-size:13px;"></p>
@@ -1515,6 +1516,9 @@ model, optimizer, _, _ = deepspeed.initialize(
             }
         } catch (err) {
             console.warn('Clerk sign-in error:', err);
+            if (this.isDevBrowserUnauthenticated(err)) {
+                this.showClerkRecoveryPrompt();
+            }
             App.showToast('Login error', 'Could not start Clerk sign-in flow.');
         }
     },
@@ -1530,8 +1534,63 @@ model, optimizer, _, _ = deepspeed.initialize(
             return window.Clerk.user || null;
         } catch (err) {
             console.warn('Clerk load error:', err);
+            if (this.isDevBrowserUnauthenticated(err)) {
+                this.showClerkRecoveryPrompt();
+            }
             return null;
         }
+    },
+
+    isDevBrowserUnauthenticated(err) {
+        const topMessage = (err && err.message) ? String(err.message).toLowerCase() : '';
+        const nestedCode = err && err.errors && err.errors[0] && err.errors[0].code
+            ? String(err.errors[0].code).toLowerCase()
+            : '';
+        const nestedMessage = err && err.errors && err.errors[0] && err.errors[0].message
+            ? String(err.errors[0].message).toLowerCase()
+            : '';
+
+        return topMessage.includes('browser unauthenticated') ||
+            nestedMessage.includes('browser unauthenticated') ||
+            nestedCode === 'dev_browser_unauthenticated';
+    },
+
+    showClerkRecoveryPrompt() {
+        const status = document.getElementById('certAuthStatus');
+        if (!status) return;
+
+        status.style.color = 'var(--warning)';
+        status.innerHTML = `
+            Clerk dev session looks stale (<code>dev_browser_unauthenticated</code>).
+            <button class="btn-secondary btn-small" style="margin-left:8px;" onclick="Chapter15.resetClerkSessionAndReload()">
+                Reset Clerk session &amp; reload
+            </button>
+        `;
+    },
+
+    resetClerkSessionAndReload() {
+        const clearStorage = (storage) => {
+            const keys = [];
+            for (let i = 0; i < storage.length; i++) {
+                const k = storage.key(i);
+                if (k && k.toLowerCase().includes('clerk')) keys.push(k);
+            }
+            keys.forEach((k) => storage.removeItem(k));
+        };
+
+        try { clearStorage(localStorage); } catch (e) {}
+        try { clearStorage(sessionStorage); } catch (e) {}
+
+        // Best-effort cookie cleanup for current domain.
+        try {
+            document.cookie.split(';').forEach((cookie) => {
+                const name = cookie.split('=')[0].trim();
+                if (!name || !name.toLowerCase().includes('clerk')) return;
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+            });
+        } catch (e) {}
+
+        window.location.reload();
     },
 
     async refreshCertificationUI() {
