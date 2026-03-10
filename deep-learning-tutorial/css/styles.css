@@ -225,6 +225,26 @@ body {
     padding: 40px;
 }
 
+.site-footer {
+    margin-left: var(--sidebar-width);
+    padding: 18px 40px 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+}
+
+.site-footer a {
+    color: var(--accent-secondary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
 .chapter-container {
     display: none;
     max-width: 900px;
@@ -262,7 +282,37 @@ body {
 .subtitle {
     font-size: 20px;
     color: var(--text-secondary);
-    margin-bottom: 50px;
+    max-width: 860px;
+    margin: 0 auto 22px;
+}
+
+.welcome-proof {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto 32px;
+}
+
+.proof-item {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 12px;
+}
+
+.proof-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.proof-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
 }
 
 .welcome-features {
@@ -289,7 +339,58 @@ body {
 
 .feature-icon { font-size: 36px; margin-bottom: 12px; }
 .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-.feature-card p { font-size: 13px; color: var(--text-secondary); }
+.feature-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+.welcome-roadmap {
+    margin: -20px auto 24px;
+    max-width: 900px;
+    padding: 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.welcome-roadmap h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.welcome-roadmap p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.roadmap-chip {
+    border: 1px solid var(--border-light);
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--text-primary);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.roadmap-chip:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+    background: rgba(99, 102, 241, 0.18);
+}
+
+.welcome-outcome {
+    margin: -14px auto 24px;
+    max-width: 860px;
+    color: var(--text-secondary);
+    font-size: 15px;
+}
 
 /* ---- Buttons ---- */
 .btn-primary {
@@ -1466,10 +1567,16 @@ input[type="range"]::-webkit-slider-thumb {
     .sidebar-toggle { display: flex; }
 
     .content { margin-left: 0; padding: 20px; }
+    .site-footer { margin-left: 0; padding: 16px 20px 24px; }
 
+    .welcome-proof { grid-template-columns: 1fr; }
     .welcome-features { grid-template-columns: 1fr; }
+    .roadmap-grid { grid-template-columns: 1fr; }
+    .roadmap-chip { text-align: left; }
 
     .welcome-hero h1 { font-size: 32px; }
+    .subtitle { font-size: 18px; }
+    .welcome-outcome { font-size: 14px; }
 
     .draw-area { grid-template-columns: 1fr; }
 
