@@ -3,534 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Learning Interactive Tutorial - That's all you need to know</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Interactive AI Tutorial Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #071420;
+            --bg-soft: #0e1e2d;
+            --card: rgba(13, 27, 42, 0.84);
+            --card-border: rgba(122, 160, 191, 0.22);
+            --text: #ecf3fb;
+            --muted: #9eb0c4;
+            --accent: #10b981;
+            --accent-2: #06b6d4;
+            --warning: #fb923c;
+            --shadow: 0 24px 64px rgba(2, 9, 18, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            background:
+                radial-gradient(1200px 700px at 15% -10%, rgba(6, 182, 212, 0.24), transparent 58%),
+                radial-gradient(950px 600px at 105% 5%, rgba(16, 185, 129, 0.20), transparent 62%),
+                linear-gradient(165deg, #071420, #0a1726 45%, #0d1c2d 100%);
+            padding: 52px 20px 64px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            inset: auto;
+            z-index: -1;
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            left: -60px;
+            top: 35%;
+            background: rgba(251, 146, 60, 0.18);
+            animation: floatBlob 9s ease-in-out infinite;
+        }
+
+        body::after {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            right: -70px;
+            top: 60px;
+            background: rgba(6, 182, 212, 0.16);
+            animation: floatBlob 11s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatBlob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+
+        .container {
+            width: min(1120px, 100%);
+            margin: 0 auto;
+        }
+
+        .hero {
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            background: linear-gradient(150deg, rgba(11, 24, 37, 0.82), rgba(8, 20, 33, 0.92));
+            backdrop-filter: blur(10px);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            margin-bottom: 26px;
+            animation: reveal 0.6s ease-out;
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-top {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .pill {
+            border-radius: 999px;
+            border: 1px solid rgba(6, 182, 212, 0.45);
+            color: #a5f3fc;
+            background: rgba(6, 182, 212, 0.14);
+            font-size: 12px;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 8px 12px;
+        }
+
+        .status {
+            border-radius: 999px;
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #bbf7d0;
+            background: rgba(16, 185, 129, 0.16);
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 8px 12px;
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(32px, 5vw, 58px);
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        h1 .shine {
+            background: linear-gradient(92deg, #4ade80, #22d3ee 55%, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sub {
+            max-width: 790px;
+            color: var(--muted);
+            font-size: clamp(15px, 2vw, 18px);
+            line-height: 1.72;
+            margin-bottom: 20px;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .quick-stat {
+            border: 1px solid rgba(122, 160, 191, 0.22);
+            background: rgba(8, 17, 29, 0.65);
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+
+        .quick-stat .value {
+            display: block;
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            line-height: 1.15;
+            margin-bottom: 2px;
+        }
+
+        .quick-stat .label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            border-radius: 18px;
+            border: 1px solid var(--card-border);
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            padding: 18px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.26s ease, border-color 0.26s ease, box-shadow 0.26s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(122, 160, 191, 0.42);
+            box-shadow: 0 16px 32px rgba(2, 9, 18, 0.34);
+        }
+
+        .card.active {
+            border-color: rgba(16, 185, 129, 0.55);
+            box-shadow: 0 18px 38px rgba(3, 12, 22, 0.44);
+            overflow: hidden;
+        }
+
+        .card.active::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.24), transparent 70%);
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            border-radius: 999px;
+            padding: 6px 10px;
+        }
+
+        .tag.live {
+            color: #bbf7d0;
+            background: rgba(16, 185, 129, 0.19);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+        }
+
+        .tag.soon {
+            color: #fed7aa;
+            background: rgba(251, 146, 60, 0.16);
+            border: 1px solid rgba(251, 146, 60, 0.38);
+        }
+
+        .icon {
+            font-size: 28px;
+            filter: drop-shadow(0 6px 14px rgba(10, 18, 30, 0.5));
+        }
+
+        .card h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 23px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: auto;
+        }
+
+        .button {
+            margin-top: 16px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+        }
+
+        .button.primary {
+            color: #022c22;
+            background: linear-gradient(135deg, #34d399, #22d3ee);
+            box-shadow: 0 8px 24px rgba(34, 211, 238, 0.2);
+        }
+
+        .button.ghost {
+            color: #d5dee8;
+            background: rgba(148, 163, 184, 0.12);
+            border-color: rgba(148, 163, 184, 0.28);
+            cursor: not-allowed;
+        }
+
+        .foot {
+            margin-top: 26px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .foot a {
+            color: #a5f3fc;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(165, 243, 252, 0.45);
+        }
+
+        @media (max-width: 980px) {
+            .quick-stats,
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: clamp(28px, 9vw, 44px);
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <span class="logo-icon">&#x1F9E0;</span>
-                <span class="logo-text">DLIT</span>
+    <main class="container">
+        <section class="hero">
+            <div class="hero-top">
+                <span class="pill">Interactive Tutorial Series</span>
+                <span class="status">Track 1 Available</span>
             </div>
-            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
+            <h1>Master <span class="shine">AI</span> in Guided Tracks</h1>
+            <p class="sub">This is the main screen for your tutorial series. Start with the full Deep Learning journey now, then unlock upcoming AI and ML tracks when they go live.</p>
 
-        <div class="progress-overview">
-            <div class="progress-label">
-                <span>Overall Progress</span>
-                <span id="progressPercent">0%</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="xp-display">
-                <span class="xp-icon">&#x2B50;</span>
-                <span id="xpCount">0</span> XP
-            </div>
-            <div class="xp-display" style="margin-top: 4px;">
-                <span class="xp-icon">&#x1F3C6;</span>
-                <span id="achievementCount">0/20</span> Achievements
-            </div>
-        </div>
-
-        <ul class="nav-menu">
-            <li class="nav-section">Module 1: Foundation</li>
-            <li class="nav-item active" data-chapter="1-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">1.1 Hello Neural Networks</span>
-            </li>
-            <li class="nav-item" data-chapter="1-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">1.2 Fashion Detective</span>
-            </li>
-
-            <li class="nav-section">Module 2: Math Behind the Magic</li>
-            <li class="nav-item" data-chapter="2-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">2.1 Activation Functions</span>
-            </li>
-            <li class="nav-item" data-chapter="2-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">2.2 Derivatives</span>
-            </li>
-            <li class="nav-item" data-chapter="2-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">2.3 Matrix Math</span>
-            </li>
-            <li class="nav-item" data-chapter="2-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">2.4 Loss Functions</span>
-            </li>
-            <li class="nav-item" data-chapter="2-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">2.5 Gradient Descent</span>
-            </li>
-
-            <li class="nav-section">Module 3: Building From Scratch</li>
-            <li class="nav-item" data-chapter="3-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">3.1 NN From Scratch</span>
-            </li>
-            <li class="nav-item" data-chapter="3-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">3.2 SGD vs GD Battle</span>
-            </li>
-
-            <li class="nav-section">Module 4: Training & Monitoring</li>
-            <li class="nav-item" data-chapter="4-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">4.1 TensorBoard Dashboard</span>
-            </li>
-            <li class="nav-item" data-chapter="4-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">4.2 GPU Speed Boost</span>
-            </li>
-
-            <li class="nav-section">Module 5: Evaluation & Metrics</li>
-            <li class="nav-item" data-chapter="5-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">5.1 Precision & Recall</span>
-            </li>
-            <li class="nav-item" data-chapter="5-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">5.2 Dropout & Regularization</span>
-            </li>
-            <li class="nav-item" data-chapter="5-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">5.3 Imbalanced Data</span>
-            </li>
-            <li class="nav-item" data-chapter="5-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">5.4 Churn Prediction</span>
-            </li>
-
-            <li class="nav-section">Module 6: Computer Vision</li>
-            <li class="nav-item" data-chapter="6-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">6.1 Convolutional Networks</span>
-            </li>
-            <li class="nav-item" data-chapter="6-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">6.2 Data Augmentation</span>
-            </li>
-            <li class="nav-item" data-chapter="6-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">6.3 Transfer Learning</span>
-            </li>
-
-            <li class="nav-section">Module 7: NLP</li>
-            <li class="nav-item" data-chapter="7-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">7.1 Word Embeddings</span>
-            </li>
-            <li class="nav-item" data-chapter="7-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">7.2 Word2Vec</span>
-            </li>
-            <li class="nav-item" data-chapter="7-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">7.3 RNN Text Classification</span>
-            </li>
-
-            <li class="nav-section">Module 8: Advanced</li>
-            <li class="nav-item" data-chapter="8-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">8.1 Distributed Training</span>
-            </li>
-            <li class="nav-item" data-chapter="8-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">8.2 Data Pipelines</span>
-            </li>
-            <li class="nav-item" data-chapter="8-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">8.3 BERT & Transformers</span>
-            </li>
-            <li class="nav-item" data-chapter="8-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">8.4 Model Deployment</span>
-            </li>
-            <li class="nav-item" data-chapter="8-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">8.5 Model Optimization</span>
-            </li>
-
-            <li class="nav-section">Module 9: Transformers</li>
-            <li class="nav-item" data-chapter="9-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">9.1 Transformer Architecture</span>
-            </li>
-            <li class="nav-item" data-chapter="9-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">9.2 Tokenization & Encoding</span>
-            </li>
-            <li class="nav-item" data-chapter="9-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">9.3 Self-Attention Deep Dive</span>
-            </li>
-            <li class="nav-item" data-chapter="9-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">9.4 GPT & Text Generation</span>
-            </li>
-            <li class="nav-item" data-chapter="9-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">9.5 Vision Transformers</span>
-            </li>
-            <li class="nav-section">Module 10: LLMs & Scaling</li>
-            <li class="nav-item" data-chapter="10-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">10.1 GPT Revolution & Scaling</span>
-            </li>
-            <li class="nav-item" data-chapter="10-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">10.2 In-Context Learning</span>
-            </li>
-            <li class="nav-item" data-chapter="10-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">10.3 Chain-of-Thought</span>
-            </li>
-            <li class="nav-item" data-chapter="10-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">10.4 RLHF & Instruction</span>
-            </li>
-            <li class="nav-item" data-chapter="10-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">10.5 Advanced Alignment</span>
-            </li>
-
-            <li class="nav-section">Module 11: Generative AI & Multimodal</li>
-            <li class="nav-item" data-chapter="11-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">11.1 Diffusion Models</span>
-            </li>
-            <li class="nav-item" data-chapter="11-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">11.2 Text-to-Image</span>
-            </li>
-            <li class="nav-item" data-chapter="11-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">11.3 Vision-Language Models</span>
-            </li>
-            <li class="nav-item" data-chapter="11-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">11.4 Text-to-Video & Audio</span>
-            </li>
-            <li class="nav-item" data-chapter="11-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">11.5 Multimodal Foundation</span>
-            </li>
-
-            <li class="nav-section">Module 12: Frontier & Emerging</li>
-            <li class="nav-item" data-chapter="12-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">12.1 State Space Models</span>
-            </li>
-            <li class="nav-item" data-chapter="12-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">12.2 Mixture of Experts</span>
-            </li>
-            <li class="nav-item" data-chapter="12-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">12.3 Efficient Fine-Tuning</span>
-            </li>
-            <li class="nav-item" data-chapter="12-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">12.4 RAG Systems</span>
-            </li>
-            <li class="nav-item" data-chapter="12-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">12.5 AI Agents</span>
-            </li>
-
-            <li class="nav-section">Module 13: Attention & Memory</li>
-            <li class="nav-item" data-chapter="13-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">13.1 FlashAttention</span>
-            </li>
-            <li class="nav-item" data-chapter="13-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">13.2 Sparse Attention & DSA</span>
-            </li>
-            <li class="nav-item" data-chapter="13-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">13.3 Multi-Head Latent Attention</span>
-            </li>
-            <li class="nav-item" data-chapter="13-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">13.4 KV Cache & Paged Attention</span>
-            </li>
-            <li class="nav-item" data-chapter="13-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">13.5 Speculative Decoding</span>
-            </li>
-
-            <li class="nav-section">Module 14: Reasoning & Training</li>
-            <li class="nav-item" data-chapter="14-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">14.1 Reasoning & Thinking Tokens</span>
-            </li>
-            <li class="nav-item" data-chapter="14-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">14.2 Process Rewards & GRPO</span>
-            </li>
-            <li class="nav-item" data-chapter="14-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">14.3 Tree of Thought</span>
-            </li>
-            <li class="nav-item" data-chapter="14-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">14.4 Synthetic Data & Self-Play</span>
-            </li>
-            <li class="nav-item" data-chapter="14-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">14.5 DeepSeek & RAGEN</span>
-            </li>
-
-            <li class="nav-section">Module 15: Production LLM Systems</li>
-            <li class="nav-item" data-chapter="15-1">
-                <span class="nav-status"></span>
-                <span class="nav-label">15.1 Quantization Deep Dive</span>
-            </li>
-            <li class="nav-item" data-chapter="15-2">
-                <span class="nav-status"></span>
-                <span class="nav-label">15.2 Distributed Training</span>
-            </li>
-            <li class="nav-item" data-chapter="15-3">
-                <span class="nav-status"></span>
-                <span class="nav-label">15.3 Inference Engines</span>
-            </li>
-            <li class="nav-item" data-chapter="15-4">
-                <span class="nav-status"></span>
-                <span class="nav-label">15.4 External Memory</span>
-            </li>
-            <li class="nav-item" data-chapter="15-5">
-                <span class="nav-status"></span>
-                <span class="nav-label">15.5 Frontier & Future</span>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="content" id="content">
-        <!-- Welcome Screen -->
-        <div id="welcome" class="chapter-container active">
-            <div class="welcome-hero">
-                <h1>Welcome to <span class="gradient-text">Deep Learning</span></h1>
-                <p class="subtitle">Go from zero to confident </p>
-                <div class="welcome-proof">
-                    <div class="proof-item">
-                        <span class="proof-label">15 modules</span>
-                        <span class="proof-value">step-by-step roadmap</span>
-                    </div>
-                    <div class="proof-item">
-                        <span class="proof-label">Interactive demos</span>
-                        <span class="proof-value">learn by doing, not memorizing</span>
-                    </div>
-                    <div class="proof-item">
-                        <span class="proof-label">Practical outcomes</span>
-                        <span class="proof-value">build intuition you can use in projects</span>
-                    </div>
+            <div class="quick-stats">
+                <div class="quick-stat">
+                    <span class="value">01</span>
+                    <span class="label">Live Learning Track</span>
                 </div>
-                <!-- <div class="welcome-features">
-                    <div class="feature-card">
-                        <div class="feature-icon">&#x1F3AE;</div>
-                        <h3>Interactive Learning</h3>
-                        <p>Experiment with concepts live so each topic becomes easy to remember.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">&#x1F4CA;</div>
-                        <h3>Visual Explanations</h3>
-                        <p>Understand complex math and algorithms through clear, animated intuition.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">&#x1F3C6;</div>
-                        <h3>Progress You Can Feel</h3>
-                        <p>Track improvement with XP, badges, and milestones as you advance.</p>
-                    </div>
-                </div> -->
-                <div class="welcome-roadmap">
-                    <h3>Learning Roadmap</h3>
-                    <p>Follow this path from basics to production-ready LLM systems.</p>
-                    <div class="roadmap-grid">
-                        <button class="roadmap-chip" onclick="App.navigateTo('1-1')">1. Foundation</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('2-1')">2. Math Behind the Magic</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('3-1')">3. Building From Scratch</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('4-1')">4. Training &amp; Monitoring</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('5-1')">5. Evaluation &amp; Metrics</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('6-1')">6. Computer Vision</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('7-1')">7. NLP</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('8-1')">8. Advanced</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('9-1')">9. Transformers</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('10-1')">10. LLMs &amp; Scaling</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('11-1')">11. Generative AI &amp; Multimodal</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('12-1')">12. Frontier &amp; Emerging</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('13-1')">13. Attention &amp; Memory</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('14-1')">14. Reasoning &amp; Training</button>
-                        <button class="roadmap-chip" onclick="App.navigateTo('15-1')">15. Production LLM Systems</button>
-                    </div>
+                <div class="quick-stat">
+                    <span class="value">02</span>
+                    <span class="label">Upcoming Tracks</span>
                 </div>
-                <div class="learning-radar">
-                    <h3>Learning Radar</h3>
-                    <p>Track where you are strong, where you need practice, and what is still left to learn.</p>
-                    <div class="learning-radar-grid">
-                        <div class="radar-canvas-wrap">
-                            <canvas id="learningRadarCanvas" width="420" height="340"></canvas>
-                        </div>
-                        <div class="radar-insights">
-                            <div class="radar-insight-card">
-                                <h4>Strong</h4>
-                                <p id="radarStrong">Complete a few quizzes to unlock your strengths.</p>
-                            </div>
-                            <div class="radar-insight-card">
-                                <h4>Needs Work</h4>
-                                <p id="radarWeak">Areas with low mastery will appear here.</p>
-                            </div>
-                            <div class="radar-insight-card">
-                                <h4>Learning Left</h4>
-                                <p id="radarLeft">Modules not completed yet will be listed here.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="quick-stat">
+                    <span class="value">61</span>
+                    <span class="label">Deep Learning Chapters</span>
                 </div>
-                <p class="welcome-outcome">By the end, you will understand how modern neural networks learn, predict, and scale in real-world systems.</p>
-                <button class="btn-primary btn-large" onclick="App.navigateTo('1-1')">
-                    Start Learning &#x2192;
-                </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Chapter containers will be populated by JS -->
-        <div id="chapter-1-1" class="chapter-container"></div>
-        <div id="chapter-1-2" class="chapter-container"></div>
-        <div id="chapter-2-1" class="chapter-container"></div>
-        <div id="chapter-2-2" class="chapter-container"></div>
-        <div id="chapter-2-3" class="chapter-container"></div>
-        <div id="chapter-2-4" class="chapter-container"></div>
-        <div id="chapter-2-5" class="chapter-container"></div>
-        <div id="chapter-3-1" class="chapter-container"></div>
-        <div id="chapter-3-2" class="chapter-container"></div>
-        <div id="chapter-4-1" class="chapter-container"></div>
-        <div id="chapter-4-2" class="chapter-container"></div>
-        <div id="chapter-5-1" class="chapter-container"></div>
-        <div id="chapter-5-2" class="chapter-container"></div>
-        <div id="chapter-5-3" class="chapter-container"></div>
-        <div id="chapter-5-4" class="chapter-container"></div>
-        <div id="chapter-6-1" class="chapter-container"></div>
-        <div id="chapter-6-2" class="chapter-container"></div>
-        <div id="chapter-6-3" class="chapter-container"></div>
-        <div id="chapter-7-1" class="chapter-container"></div>
-        <div id="chapter-7-2" class="chapter-container"></div>
-        <div id="chapter-7-3" class="chapter-container"></div>
-        <div id="chapter-8-1" class="chapter-container"></div>
-        <div id="chapter-8-2" class="chapter-container"></div>
-        <div id="chapter-8-3" class="chapter-container"></div>
-        <div id="chapter-8-4" class="chapter-container"></div>
-        <div id="chapter-8-5" class="chapter-container"></div>
-        <div id="chapter-9-1" class="chapter-container"></div>
-        <div id="chapter-9-2" class="chapter-container"></div>
-        <div id="chapter-9-3" class="chapter-container"></div>
-        <div id="chapter-9-4" class="chapter-container"></div>
-        <div id="chapter-9-5" class="chapter-container"></div>
-        <div id="chapter-10-1" class="chapter-container"></div>
-        <div id="chapter-10-2" class="chapter-container"></div>
-        <div id="chapter-10-3" class="chapter-container"></div>
-        <div id="chapter-10-4" class="chapter-container"></div>
-        <div id="chapter-10-5" class="chapter-container"></div>
-        <div id="chapter-11-1" class="chapter-container"></div>
-        <div id="chapter-11-2" class="chapter-container"></div>
-        <div id="chapter-11-3" class="chapter-container"></div>
-        <div id="chapter-11-4" class="chapter-container"></div>
-        <div id="chapter-11-5" class="chapter-container"></div>
-        <div id="chapter-12-1" class="chapter-container"></div>
-        <div id="chapter-12-2" class="chapter-container"></div>
-        <div id="chapter-12-3" class="chapter-container"></div>
-        <div id="chapter-12-4" class="chapter-container"></div>
-        <div id="chapter-12-5" class="chapter-container"></div>
-        <div id="chapter-13-1" class="chapter-container"></div>
-        <div id="chapter-13-2" class="chapter-container"></div>
-        <div id="chapter-13-3" class="chapter-container"></div>
-        <div id="chapter-13-4" class="chapter-container"></div>
-        <div id="chapter-13-5" class="chapter-container"></div>
-        <div id="chapter-14-1" class="chapter-container"></div>
-        <div id="chapter-14-2" class="chapter-container"></div>
-        <div id="chapter-14-3" class="chapter-container"></div>
-        <div id="chapter-14-4" class="chapter-container"></div>
-        <div id="chapter-14-5" class="chapter-container"></div>
-        <div id="chapter-15-1" class="chapter-container"></div>
-        <div id="chapter-15-2" class="chapter-container"></div>
-        <div id="chapter-15-3" class="chapter-container"></div>
-        <div id="chapter-15-4" class="chapter-container"></div>
-        <div id="chapter-15-5" class="chapter-container"></div>
+        <section class="grid">
+            <article class="card active">
+                <div class="card-head">
+                    <span class="tag live">Live now</span>
+                    <span class="icon">🧠</span>
+                </div>
+                <h2>Deep Learning for Everyone</h2>
+                <p>Interactive, visual, and quiz-driven roadmap from neural network basics to production-grade LLM systems.</p>
+                <a class="button primary" href="deeplearning.html">Open Deep Learning Track →</a>
+            </article>
+
+            <article class="card">
+                <div class="card-head">
+                    <span class="tag soon">Coming soon</span>
+                    <span class="icon">🤖</span>
+                </div>
+                <h2>AI for Everyone</h2>
+                <p>Practical AI track for product, business, and creators to use AI safely, effectively, and at scale.</p>
+                <button class="button ghost" type="button">Coming Soon</button>
+            </article>
+
+            <article class="card">
+                <div class="card-head">
+                    <span class="tag soon">Coming soon</span>
+                    <span class="icon">📈</span>
+                </div>
+                <h2>ML for Everyone</h2>
+                <p>Beginner-friendly machine learning track covering data prep, model selection, evaluation, and deployment.</p>
+                <button class="button ghost" type="button">Coming Soon</button>
+            </article>
+        </section>
+
+        <p class="foot">Created by <a href="https://www.linkedin.com/in/abhisek-bose/" target="_blank" rel="noopener noreferrer">Abhisek Bose</a></p>
     </main>
-
-    <!-- Quiz Modal -->
-    <div class="modal-overlay" id="quizModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="quizTitle">Quiz</h2>
-                <span class="quiz-progress" id="quizProgress">1/5</span>
-            </div>
-            <div class="modal-body" id="quizBody"></div>
-            <div class="modal-footer">
-                <button class="btn-secondary" id="quizSkip" onclick="Quiz.skip()">Skip</button>
-                <button class="btn-primary" id="quizSubmit" onclick="Quiz.submit()">Check Answer</button>
-                <button class="btn-primary hidden" id="quizNext" onclick="Quiz.next()">Next &#x2192;</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Achievement Toast -->
-    <div class="toast" id="achievementToast">
-        <div class="toast-icon">&#x1F3C6;</div>
-        <div class="toast-content">
-            <div class="toast-title" id="toastTitle">Achievement Unlocked!</div>
-            <div class="toast-message" id="toastMessage"></div>
-        </div>
-    </div>
-
-    <footer class="site-footer">
-        Created by
-        <a href="https://www.linkedin.com/in/abhisek-bose/" target="_blank" rel="noopener noreferrer">Abhisek Bose</a>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
-        // Keep this global for Chapter 15 certification flow.
-        window.CLERK_PUBLISHABLE_KEY = 'pk_test_cG9ldGljLWxhcmstOTkuY2xlcmsuYWNjb3VudHMuZGV2JA';
-    </script>
-    <script
-        async
-        crossorigin="anonymous"
-        data-clerk-publishable-key="pk_test_cG9ldGljLWxhcmstOTkuY2xlcmsuYWNjb3VudHMuZGV2JA"
-        src="https://poetic-lark-99.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        type="text/javascript"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/quiz.js"></script>
-    <script src="js/chapter1.js"></script>
-    <script src="js/chapter2.js"></script>
-    <script src="js/chapter3.js"></script>
-    <script src="js/chapter4.js"></script>
-    <script src="js/chapter5.js"></script>
-    <script src="js/chapter6.js"></script>
-    <script src="js/chapter7.js"></script>
-    <script src="js/chapter8.js"></script>
-    <script src="js/chapter9.js"></script>
-    <script src="js/chapter10.js"></script>
-    <script src="js/chapter11.js"></script>
-    <script src="js/chapter12.js"></script>
-    <script src="js/chapter13.js"></script>
-    <script src="js/chapter14.js"></script>
-    <script src="js/chapter15.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            App.init();
-        });
-    </script>
 </body>
 </html>
