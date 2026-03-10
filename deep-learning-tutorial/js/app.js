@@ -10,6 +10,14 @@ const App = {
     achievements: [],
     xp: 0,
     totalChapters: 61,
+    LEARNING_MODULES: [
+        { label: 'Foundations', chapters: ['1-1','1-2','2-1','2-2','2-3','2-4','2-5'] },
+        { label: 'Modeling', chapters: ['3-1','3-2','4-1','4-2','5-1','5-2','5-3','5-4'] },
+        { label: 'Computer Vision', chapters: ['6-1','6-2','6-3'] },
+        { label: 'NLP', chapters: ['7-1','7-2','7-3','8-1','8-2'] },
+        { label: 'Transformers', chapters: ['8-3','8-4','8-5','9-1','9-2','9-3','9-4','9-5'] },
+        { label: 'LLM Systems', chapters: ['10-1','10-2','10-3','10-4','10-5','11-1','11-2','11-3','11-4','11-5','12-1','12-2','12-3','12-4','12-5','13-1','13-2','13-3','13-4','13-5','14-1','14-2','14-3','14-4','14-5','15-1','15-2','15-3','15-4','15-5'] }
+    ],
 
     // Achievement definitions
     ACHIEVEMENTS: [
@@ -281,6 +289,144 @@ const App = {
             const navItem = document.querySelector(`.nav-item[data-chapter="${chapterId}"]`);
             if (navItem) navItem.classList.add('completed');
         });
+
+        this.renderLearningRadar();
+    },
+
+    renderLearningRadar() {
+        const canvas = document.getElementById('learningRadarCanvas');
+        if (!canvas) return;
+
+        const modules = this.LEARNING_MODULES.map((module) => {
+            const completed = module.chapters.filter((id) => this.progress[id]).length;
+            const completion = completed / module.chapters.length;
+
+            const quizScores = module.chapters
+                .map((id) => this.quizzesCompleted[id]?.bestPercent)
+                .filter((score) => typeof score === 'number');
+            const quizRatio = quizScores.length > 0
+                ? (quizScores.reduce((a, b) => a + b, 0) / quizScores.length) / 100
+                : completion;
+
+            const mastery = Math.round((completion * 0.6 + quizRatio * 0.4) * 100);
+            return { label: module.label, mastery, completion };
+        });
+
+        this.drawLearningRadarChart(canvas, modules);
+        this.updateLearningInsights(modules);
+    },
+
+    drawLearningRadarChart(canvas, modules) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const cx = W / 2;
+        const cy = H / 2;
+        const radius = Math.min(W, H) * 0.34;
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#0d1220';
+        ctx.fillRect(0, 0, W, H);
+
+        const count = modules.length;
+        const angleAt = (i) => (Math.PI * 2 * i / count) - Math.PI / 2;
+
+        // Grid rings
+        for (let level = 1; level <= 4; level++) {
+            const r = (radius * level) / 4;
+            ctx.beginPath();
+            for (let i = 0; i < count; i++) {
+                const a = angleAt(i);
+                const x = cx + Math.cos(a) * r;
+                const y = cy + Math.sin(a) * r;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = 'rgba(129, 140, 248, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        // Axis lines and labels
+        ctx.font = '12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        for (let i = 0; i < count; i++) {
+            const a = angleAt(i);
+            const ax = cx + Math.cos(a) * radius;
+            const ay = cy + Math.sin(a) * radius;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(ax, ay);
+            ctx.strokeStyle = 'rgba(129, 140, 248, 0.25)';
+            ctx.stroke();
+
+            const lx = cx + Math.cos(a) * (radius + 22);
+            const ly = cy + Math.sin(a) * (radius + 22);
+            ctx.fillStyle = '#cbd5e1';
+            ctx.fillText(modules[i].label, lx, ly);
+        }
+
+        // Learner polygon
+        ctx.beginPath();
+        for (let i = 0; i < count; i++) {
+            const value = modules[i].mastery / 100;
+            const r = radius * value;
+            const a = angleAt(i);
+            const x = cx + Math.cos(a) * r;
+            const y = cy + Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.22)';
+        ctx.fill();
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Data points
+        modules.forEach((module, i) => {
+            const r = radius * (module.mastery / 100);
+            const a = angleAt(i);
+            const x = cx + Math.cos(a) * r;
+            const y = cy + Math.sin(a) * r;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#a7f3d0';
+            ctx.fill();
+        });
+    },
+
+    updateLearningInsights(modules) {
+        const strongEl = document.getElementById('radarStrong');
+        const weakEl = document.getElementById('radarWeak');
+        const leftEl = document.getElementById('radarLeft');
+        if (!strongEl || !weakEl || !leftEl) return;
+
+        const strong = modules
+            .filter((m) => m.mastery >= 70)
+            .sort((a, b) => b.mastery - a.mastery)
+            .slice(0, 3);
+        const weak = modules
+            .filter((m) => m.mastery < 45)
+            .sort((a, b) => a.mastery - b.mastery)
+            .slice(0, 3);
+        const left = modules
+            .filter((m) => m.completion < 1)
+            .sort((a, b) => a.completion - b.completion)
+            .slice(0, 4);
+
+        strongEl.textContent = strong.length > 0
+            ? strong.map((m) => `${m.label} (${m.mastery}%)`).join(', ')
+            : 'No strong zone yet. Keep completing chapters and quizzes.';
+        weakEl.textContent = weak.length > 0
+            ? weak.map((m) => `${m.label} (${m.mastery}%)`).join(', ')
+            : 'No weak zone detected right now.';
+        leftEl.textContent = left.length > 0
+            ? left.map((m) => `${m.label} (${Math.round((1 - m.completion) * 100)}% left)`).join(', ')
+            : 'Everything completed. Great job.';
     },
 
     // ---- Toast ----

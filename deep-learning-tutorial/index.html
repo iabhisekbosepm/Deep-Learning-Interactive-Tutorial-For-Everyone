@@ -319,8 +319,8 @@
         <!-- Welcome Screen -->
         <div id="welcome" class="chapter-container active">
             <div class="welcome-hero">
-                <h1>Welcome to <span class="gradient-text">Deep Learning Interactive Tutorial</span></h1>
-                <p class="subtitle">Go from zero to confident in deep learning with guided visuals, hands-on practice, and real model intuition.</p>
+                <h1>Welcome to <span class="gradient-text">Deep Learning</span></h1>
+                <p class="subtitle">Go from zero to confident </p>
                 <div class="welcome-proof">
                     <div class="proof-item">
                         <span class="proof-label">15 modules</span>
@@ -335,7 +335,7 @@
                         <span class="proof-value">build intuition you can use in projects</span>
                     </div>
                 </div>
-                <div class="welcome-features">
+                <!-- <div class="welcome-features">
                     <div class="feature-card">
                         <div class="feature-icon">&#x1F3AE;</div>
                         <h3>Interactive Learning</h3>
@@ -351,7 +351,7 @@
                         <h3>Progress You Can Feel</h3>
                         <p>Track improvement with XP, badges, and milestones as you advance.</p>
                     </div>
-                </div>
+                </div> -->
                 <div class="welcome-roadmap">
                     <h3>Learning Roadmap</h3>
                     <p>Follow this path from basics to production-ready LLM systems.</p>
@@ -371,6 +371,29 @@
                         <button class="roadmap-chip" onclick="App.navigateTo('13-1')">13. Attention &amp; Memory</button>
                         <button class="roadmap-chip" onclick="App.navigateTo('14-1')">14. Reasoning &amp; Training</button>
                         <button class="roadmap-chip" onclick="App.navigateTo('15-1')">15. Production LLM Systems</button>
+                    </div>
+                </div>
+                <div class="learning-radar">
+                    <h3>Learning Radar</h3>
+                    <p>Track where you are strong, where you need practice, and what is still left to learn.</p>
+                    <div class="learning-radar-grid">
+                        <div class="radar-canvas-wrap">
+                            <canvas id="learningRadarCanvas" width="420" height="340"></canvas>
+                        </div>
+                        <div class="radar-insights">
+                            <div class="radar-insight-card">
+                                <h4>Strong</h4>
+                                <p id="radarStrong">Complete a few quizzes to unlock your strengths.</p>
+                            </div>
+                            <div class="radar-insight-card">
+                                <h4>Needs Work</h4>
+                                <p id="radarWeak">Areas with low mastery will appear here.</p>
+                            </div>
+                            <div class="radar-insight-card">
+                                <h4>Learning Left</h4>
+                                <p id="radarLeft">Modules not completed yet will be listed here.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <p class="welcome-outcome">By the end, you will understand how modern neural networks learn, predict, and scale in real-world systems.</p>
