@@ -2795,8 +2795,8 @@ prompt = <span class="string">f"Using this context:\\n{context}\\n\\nAnswer: Wha
                     <li>To generate a certificate, sign in with Google.</li>
                 </ul>
                 <div class="controls" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-                    <!-- <button class="btn-secondary" onclick="Chapter15.signInWithClerkGoogle()">Sign in with Google</button> -->
-                    <button class="btn-secondary" onclick="App.showToast('Coming soon', 'Google sign-in flow is coming soon.')">Sign in with Google</button>
+                    <button class="btn-secondary" onclick="Chapter15.signInWithClerkGoogle()">Sign in with Google</button>
+                    <!-- <button class="btn-secondary" onclick="App.showToast('Coming soon', 'Google sign-in flow is coming soon.')">Sign in with Google</button> -->
                     <button class="btn-primary" onclick="Chapter15.startFinalCertificationQuiz()">Start Final Quiz</button>
                 </div>
                 <p id="certAuthStatus" style="margin-top:10px;color:var(--text-secondary);font-size:13px;"></p>
