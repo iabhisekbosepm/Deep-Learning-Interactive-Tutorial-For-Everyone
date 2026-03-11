@@ -34,6 +34,10 @@ const Chapter1 = {
                     <span class="info-box-text">Think of it like this: Imagine you show your friend 1000 pictures of cats and dogs.
                     Soon, they can tell the difference every time! Neural networks learn the same way, but using numbers and math!</span>
                 </div>
+                <div class="info-box success">
+                    <span class="info-box-icon">\uD83C\uDFF7\uFE0F</span>
+                    <span class="info-box-text"><strong>Real term to remember:</strong> a <strong>neural network</strong> is a mathematical model that learns patterns from examples by adjusting weights and biases.</span>
+                </div>
 
                 <h3>The 3 Key Layers</h3>
                 <p>Every neural network has:</p>

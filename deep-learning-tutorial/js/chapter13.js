@@ -60,6 +60,13 @@ const Chapter13 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>FlashAttention</strong> is an attention algorithm that avoids materializing the full attention matrix in memory.</p>
+                <p><strong>Why it matters:</strong> it cuts memory traffic and makes long-context attention much faster on GPUs.</p>
+                <p><strong>Example:</strong> instead of storing all N\u00D7N attention scores at once, it processes blocks, updates the result, and moves on.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u26A1</span> The Big Memory Problem</h2>
                 <p>Remember how attention works? The model looks at <strong>every word</strong> and compares it with <strong>every other word</strong>. If you have 1,000 words, that means building a giant table with 1,000 rows and 1,000 columns - that's <strong>1 million</strong> numbers to store!</p>
                 <p>Imagine you're doing a school project and you need to compare every student in your class with every other student. With 30 kids, you need a chart with 900 boxes. But what if your class had 4,000 students? That's <strong>16 million boxes</strong>! Your desk would overflow!</p>

@@ -54,6 +54,16 @@ const Chapter10 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Are Scaling Laws?</h2>
+                <p><strong>Scaling laws</strong> are patterns showing how model quality changes when you increase parameters, data, and compute together. They do not mean bigger always wins. They mean the three resources need to stay in balance.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEE</span> One Tradeoff Example</h2>
+                <p>A huge model with too little text can waste capacity. A somewhat smaller model with enough high-quality data can sometimes do better because it had enough examples to fully use its parameters.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83D\uDCCA</span> The GPT Family Timeline</h2>
                 <p>Look how GPT models grew over the years \u2014 each one got WAY bigger!</p>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
@@ -78,8 +88,8 @@ const Chapter10 = {
                     <div class="feature-card" style="padding:16px;text-align:center;">
                         <div style="font-size:28px;">\uD83E\uDDD9</div>
                         <div style="font-weight:600;margin:6px 0;color:#818cf8;">GPT-4 (2023)</div>
-                        <div style="font-size:20px;font-weight:700;color:#6366f1;">~1.8T</div>
-                        <div style="font-size:12px;color:var(--text-secondary);">~1.8 TRILLION dials \u2014 like a wizard genius!</div>
+                        <div style="font-size:20px;font-weight:700;color:#6366f1;">Very Large</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">OpenAI did not publicly confirm an exact parameter count, but it is a much larger system than earlier GPT models.</div>
                     </div>
                 </div>
             </div>
@@ -386,6 +396,25 @@ gpt4_config = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is In-Context Learning?</h2>
+                <p><strong>In-context learning</strong> means the model learns the pattern from examples inside the prompt without changing its weights. <strong>Few-shot prompting</strong> means giving a few such examples.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEE</span> Before and After Prompt Example</h2>
+                <div class="code-block">
+Zero-shot:
+Review: "Beautiful visuals but a weak ending."
+Sentiment: ?
+
+Few-shot:
+Review: "I loved every minute." -> Positive
+Review: "It was dull and slow." -> Negative
+Review: "Beautiful visuals but a weak ending." -> Mixed / Negative leaning
+                </div>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83C\uDFEB</span> The School Test Analogy</h2>
                 <p>Imagine you're taking a test at school. Your teacher can help you in different ways:</p>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;">
@@ -683,6 +712,11 @@ response = model.<span class="function">generate</span>(prompt, max_tokens=<span
                 <span class="chapter-badge">Module 10 &bull; Chapter 10.3</span>
                 <h1>\uD83E\uDDE0 Chain-of-Thought Reasoning</h1>
                 <p>When your teacher says "show your work!" \u2014 that's EXACTLY what Chain-of-Thought does for AI! Let's see how thinking step-by-step makes AI way smarter!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is Chain-of-Thought?</h2>
+                <p><strong>Chain-of-Thought</strong> prompting asks the model to produce intermediate reasoning steps before the final answer. It is most useful when the task needs several logical or arithmetic steps.</p>
             </div>
 
             <div class="section">
@@ -1061,6 +1095,23 @@ response = model.<span class="function">generate</span>(prompt, max_tokens=<span
                 <span class="chapter-badge">Module 10 &bull; Chapter 10.4</span>
                 <h1>\uD83D\uDC4D RLHF & Instruction Tuning</h1>
                 <p>How do we teach an AI to be helpful, honest, and nice? It's like teaching a super-smart kid good manners!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Are Instruction Tuning and RLHF?</h2>
+                <p><strong>Instruction tuning</strong> teaches the model to follow directions using prompt-answer examples.
+                   <strong>RLHF</strong> means Reinforcement Learning from Human Feedback, where humans rank outputs and the model learns which styles people prefer.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEE</span> One Alignment Example</h2>
+                <div class="code-block">
+Base model:
+"Here are many ways to break into a system..."
+
+Instruction-tuned + RLHF model:
+"I can't help with breaking in, but I can explain how to secure a system."
+                </div>
             </div>
 
             <div class="section">
@@ -1531,6 +1582,11 @@ final_model = <span class="function">rlhf_train</span>(
                 <span class="chapter-badge">Module 10 &bull; Chapter 10.5</span>
                 <h1>\uD83D\uDCDC Advanced Alignment: Constitutional AI & DPO</h1>
                 <p>What if we could give the AI a rulebook to follow AND teach it to check its own homework? Let's learn about the coolest new ways to make AI safe and helpful!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is DPO?</h2>
+                <p><strong>DPO</strong>, or Direct Preference Optimization, trains a model directly from preferred vs rejected answers instead of first training a separate reward model.</p>
             </div>
 
             <div class="section">

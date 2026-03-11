@@ -1000,6 +1000,29 @@ model.<span class="function">fit</span>(train_dataset, epochs=<span class="numbe
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Are Transformer, Self-Attention, and BERT?</h2>
+                <p>A <strong>Transformer</strong> is a sequence model that lets each token compare itself with every other token.
+                   <strong>Self-attention</strong> is the scoring rule that decides which other tokens matter most.
+                   <strong>BERT</strong> is an encoder-only Transformer trained to understand language context.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83C\uDFAF</span> Why Do We Care?</h2>
+                <p>Transformers can understand long-range relationships across a sentence all at once, which is why they became the foundation of modern NLP.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEA</span> One Worked Example</h2>
+                <p>In <strong>"The cat sat on the mat because it was tired"</strong>, self-attention helps the token
+                   <strong>it</strong> focus on <strong>cat</strong>. That lets the model understand what <strong>it</strong> refers to.</p>
+                <div class="info-box">
+                    <span class="info-box-icon">\uD83C\uDFF7\uFE0F</span>
+                    <span class="info-box-text"><strong>Real terms to remember:</strong> masked language modeling = guessing hidden words during pretraining,
+                    fine-tuning = adapting a pretrained model to one task.</span>
+                </div>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83E\uDDE0</span> The Transformer Architecture</h2>
                 <p>The Transformer uses a cool trick called <strong>self-attention</strong>.
                    Instead of reading words one by one (like RNNs), every word looks at every
@@ -1084,6 +1107,11 @@ model.<span class="function">fit</span>(train_dataset, epochs=<span class="numbe
                     <span class="info-box-text">BERT reads both left-to-right AND right-to-left at the same time!
                     It looks at words before AND after the blank to guess. GPT is different -- it only
                     reads left-to-right, like reading a book normally. BERT cheats by peeking both ways!</span>
+                </div>
+                <div class="code-block mt-16">
+Input: "The cat sat on the mat because [MASK] was tired"
+Pretraining task: predict [MASK] -> "it"
+Fine-tuning task: reuse BERT's sentence understanding -> classifier -> sentiment / topic / spam label
                 </div>
             </div>
 
@@ -1395,6 +1423,18 @@ trainer.<span class="function">train</span>()
                 <p>Training a great AI is only half the job! Putting it online so anyone
                    can use it is called deployment. It is like building a cool app and then
                    putting it in the app store for everyone to download!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is Deployment?</h2>
+                <p><strong>Deployment</strong> means turning a trained model into a service that real users or apps can call.
+                   <strong>Latency</strong> is how long one request takes. <strong>Throughput</strong> is how many requests the service can finish in a period of time.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEA</span> One Request-Flow Example</h2>
+                <p>A phone app sends an image to the model server. The server loads the correct model version, runs inference,
+                   and sends back a prediction like <strong>"cat, 0.93 confidence"</strong>.</p>
             </div>
 
             <div class="section">
@@ -1732,6 +1772,17 @@ status = requests.<span class="function">get</span>(status_url).<span class="fun
                 <p>Real-world AI models need to be fast, small, and not waste energy!
                    There are cool tricks to make models smaller and faster without making them
                    much worse at their job. Let's learn about them!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is Model Optimization?</h2>
+                <p><strong>Model optimization</strong> means changing how a trained model is stored or executed so it becomes smaller, faster, or cheaper while keeping most of its quality.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEA</span> One Worked Example</h2>
+                <p>If a 400 MB model is converted from FP32 to INT8, it may shrink to about 100 MB and run faster,
+                   while losing only a small amount of accuracy.</p>
             </div>
 
             <div class="section">

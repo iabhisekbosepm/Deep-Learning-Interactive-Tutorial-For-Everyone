@@ -218,6 +218,120 @@ body {
     background: rgba(99, 102, 241, 0.15);
 }
 
+.nav-link-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-left: 3px solid transparent;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.nav-link-item:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.nav-status-link {
+    color: var(--text-muted);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.glossary-header {
+    margin-bottom: 20px;
+}
+
+.glossary-book {
+    background:
+        linear-gradient(180deg, rgba(255, 250, 240, 0.98), rgba(245, 237, 221, 0.96));
+    border: 1px solid rgba(180, 147, 93, 0.22);
+    border-radius: 22px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    padding: 0;
+    overflow: hidden;
+}
+
+.glossary-book-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 56px 72px;
+    color: #2d2216;
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.85;
+    background:
+        linear-gradient(90deg, rgba(166, 126, 72, 0.08), transparent 28px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(250, 243, 229, 0.12));
+}
+
+.glossary-book-intro {
+    margin: 0 0 28px;
+    font-size: 20px;
+    color: #5d4a33;
+}
+
+.glossary-book-chapter {
+    margin-top: 44px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(125, 92, 48, 0.18);
+}
+
+.glossary-book-chapter:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.glossary-book-chapter h2 {
+    margin: 0 0 18px;
+    color: #2a1f12;
+    font-size: 34px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.glossary-book-subhead {
+    margin: 26px 0 10px;
+    color: #6d4b22;
+    font-size: 21px;
+    line-height: 1.35;
+}
+
+.glossary-entry {
+    margin: 0 0 12px;
+    font-size: 18px;
+    color: #352819;
+}
+
+.glossary-entry strong {
+    color: #1f160d;
+}
+
+@media (max-width: 768px) {
+    .glossary-book-page {
+        padding: 32px 24px 44px;
+    }
+
+    .glossary-book-intro {
+        font-size: 18px;
+    }
+
+    .glossary-book-chapter h2 {
+        font-size: 28px;
+    }
+
+    .glossary-book-subhead {
+        font-size: 19px;
+    }
+
+    .glossary-entry {
+        font-size: 17px;
+    }
+}
+
 /* ---- Main Content ---- */
 .content {
     margin-left: var(--sidebar-width);

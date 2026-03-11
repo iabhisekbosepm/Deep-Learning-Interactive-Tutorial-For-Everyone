@@ -65,6 +65,13 @@ const Chapter14 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> a <strong>reasoning model</strong> generates intermediate reasoning steps, often as hidden thinking tokens, before producing the final answer.</p>
+                <p><strong>Why it matters:</strong> explicit intermediate reasoning usually improves performance on multi-step math, logic, and planning tasks.</p>
+                <p><strong>Example:</strong> for 17 \u00D7 24, the model may break the problem into 17 \u00D7 20 and 17 \u00D7 4 before combining the results into 408.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u{1F914}</span> What If AI Could Think Step by Step?</h2>
                 <p>When your teacher gives you a hard math problem, do you just blurt out an answer? No way! You <strong>think step by step</strong>, write down your work, and THEN give your answer. Guess what? AI can do the same thing!</p>
                 <p>Modern AI models like DeepSeek-R1 and OpenAI's o1 have a special power: they can <strong>think before they answer</strong>. They use special hidden notes called <strong>thinking tokens</strong> to work through problems step by step, just like you show your work on a math test!</p>

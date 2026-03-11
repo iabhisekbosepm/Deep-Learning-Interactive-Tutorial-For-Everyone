@@ -39,6 +39,13 @@ const Chapter9 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> a <strong>Transformer</strong> is a neural architecture built around attention, feed-forward layers, residual connections, and normalization.</p>
+                <p><strong>Why it matters:</strong> it handles long-range dependencies much better than older sequence models and became the backbone of modern AI systems.</p>
+                <p><strong>Example:</strong> in the sentence "The trophy did not fit in the suitcase because it was too big," attention helps decide whether <strong>it</strong> refers to the trophy or the suitcase.</p>
+            </div>
+
+            <div class="section">
                 <div class="info-box">
                     <span class="info-box-icon">\uD83D\uDD17</span>
                     <span class="info-box-text">In Chapter 8.3, we introduced self-attention and BERT. Now we go deeper into the <strong>full Transformer architecture</strong>, understanding every component and how data flows through the model.</span>

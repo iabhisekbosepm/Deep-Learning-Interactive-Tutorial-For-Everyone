@@ -40,6 +40,10 @@ const Chapter2 = {
                     with 100 layers would be no smarter than one with just 1 layer!
                     The ability to learn curvy patterns is what makes deep networks powerful!</span>
                 </div>
+                <div class="info-box success">
+                    <span class="info-box-icon">\uD83C\uDFF7\uFE0F</span>
+                    <span class="info-box-text"><strong>Real term to remember:</strong> an <strong>activation function</strong> is the formula that turns a neuron's weighted sum into its output.</span>
+                </div>
             </div>
 
             <div class="section">

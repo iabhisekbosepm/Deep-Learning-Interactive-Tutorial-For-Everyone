@@ -25,6 +25,38 @@ const Chapter3 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Are Forward Pass and Backpropagation?</h2>
+                <p><strong>Forward pass</strong> means sending an input through the network to get a prediction.
+                   <strong>Backpropagation</strong> means sending the error backward so the network learns which weights should change.</p>
+                <div class="info-box">
+                    <span class="info-box-icon">\uD83C\uDFF7\uFE0F</span>
+                    <span class="info-box-text"><strong>Real terms to remember:</strong> forward pass = prediction step,
+                    gradient = how much a weight should change, backpropagation = error-correction step.</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83C\uDFAF</span> Why Do We Care?</h2>
+                <p>These two steps are the basic learning loop of neural networks. Without a forward pass, the model cannot answer.
+                   Without backpropagation, it cannot improve from mistakes.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEE</span> One Worked Example</h2>
+                <p>Suppose a neuron predicts <strong>0.80</strong>, but the correct answer is <strong>1.00</strong>.
+                   The error is <strong>-0.20</strong>. If the input was <strong>0.50</strong>, then the gradient is roughly
+                   <strong>-0.20 \u00D7 0.50 = -0.10</strong>. With learning rate <strong>0.1</strong>:</p>
+                <div class="code-block">
+prediction = 0.80
+target = 1.00
+error = prediction - target = -0.20
+gradient = error * input = -0.10
+new_weight = 0.40 - 0.1 * (-0.10) = 0.41
+                </div>
+                <p>The weight got a little bigger because the neuron predicted too low.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83D\uDD27</span> The Building Blocks</h2>
                 <p>A neural network does the same 4 easy steps over and over. It's like a recipe!</p>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
@@ -116,6 +148,11 @@ output = nn.<span class="function">forward</span>(np.array([[<span class="number
                 <p>Think of it like this: when you get a wrong answer on a test, you go backward
                    to find where you made the mistake. That's backpropagation! It retraces steps
                    to fix each importance score a little bit.</p>
+                <div class="info-box warning">
+                    <span class="info-box-icon">\uD83D\uDCCD</span>
+                    <span class="info-box-text"><strong>Definition:</strong> a gradient tells each weight which direction to move
+                    and how strongly. Backpropagation computes those gradients from the output layer back toward the input.</span>
+                </div>
 
                 <div class="network-viz">
                     <canvas id="backpropCanvas" width="800" height="250"></canvas>

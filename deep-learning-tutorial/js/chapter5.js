@@ -25,6 +25,13 @@ const Chapter5 = {
                 <p>Just getting the right answer most of the time is not enough! Imagine a robot that always says "You're fine!" -- it would be right 99 times out of 100, but it would miss the 1 person who really needs help. We need better ways to check how smart our AI really is!</p>
             </div>
 
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>precision</strong> measures how often positive predictions are correct, while <strong>recall</strong> measures how many real positives the model successfully finds.</p>
+                <p><strong>Why it matters:</strong> different tasks care differently about false alarms and missed cases, so accuracy alone is often misleading.</p>
+                <p><strong>Example:</strong> if the model predicts 10 fraud cases and 8 are correct, precision is 8/10. If there were 20 fraud cases total and it found 8, recall is 8/20.</p>
+            </div>
+
             <!-- Why Accuracy Isn't Enough -->
             <div class="section">
                 <h2><span class="section-icon">\u26A0\uFE0F</span> Why Accuracy Isn't Enough</h2>
@@ -515,6 +522,13 @@ cm = <span class="function">confusion_matrix</span>(y_true, y_pred)
                 <span class="chapter-badge">Module 5 \u2022 Chapter 5.2</span>
                 <h1>Dropout & Regularization</h1>
                 <p>Here is the fun part: sometimes an AI cheats by memorizing all the answers instead of actually learning! That is called overfitting. We have cool tricks like dropout to stop it from being lazy!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>dropout</strong> randomly turns off neurons during training, while <strong>regularization</strong> discourages overly large or overly specific weights.</p>
+                <p><strong>Why it matters:</strong> both reduce overfitting, which helps the model work better on new data instead of memorizing the training set.</p>
+                <p><strong>Example:</strong> if the network relies on one shortcut feature, dropout forces it to use multiple features so its predictions become more robust.</p>
             </div>
 
             <!-- What is Overfitting -->
@@ -1025,6 +1039,13 @@ model_regular = <span class="function">Sequential</span>([
                 <p>Imagine you have a bag with 99 blue marbles and just 1 red marble. That is what imbalanced data looks like -- one group has WAY more examples than the other! The tricky part is that the rare group is usually the one we care about most!</p>
             </div>
 
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>imbalanced data</strong> means one class appears much more often than another.</p>
+                <p><strong>Why it matters:</strong> a model can get high accuracy by always predicting the majority class while failing on the rare class you actually care about.</p>
+                <p><strong>Example:</strong> with 990 normal transactions and 10 fraud cases, always predicting "normal" gives 99% accuracy but catches zero fraud.</p>
+            </div>
+
             <!-- The Problem -->
             <div class="section">
                 <h2><span class="section-icon">\u26A0\uFE0F</span> Why Imbalance Matters</h2>
@@ -1431,6 +1452,13 @@ X_under, y_under = rus.<span class="function">fit_resample</span>(X_train, y_tra
                 <span class="chapter-badge">Module 5 \u2022 Chapter 5.4</span>
                 <h1>Churn Prediction (Capstone)</h1>
                 <p>Time to use everything we learned! We will build a step-by-step recipe for the AI to predict churn -- that means figuring out which customers are about to leave and stop using a service. It is like predicting which friends might quit the soccer team!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>churn prediction</strong> estimates which customers are likely to leave a service soon.</p>
+                <p><strong>Why it matters:</strong> businesses can act before the customer leaves instead of reacting afterward.</p>
+                <p><strong>Example:</strong> a user with lower activity, repeated complaints, and a failed renewal may receive a high churn score and trigger a retention offer.</p>
             </div>
 
             <!-- Pipeline Overview -->

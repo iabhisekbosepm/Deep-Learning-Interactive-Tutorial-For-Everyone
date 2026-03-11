@@ -52,6 +52,29 @@ const Chapter7 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is an Embedding?</h2>
+                <p>An <strong>embedding</strong> is a learned list of numbers that represents the meaning of a word.
+                   Words with similar meanings end up with vectors that sit close together.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83C\uDFAF</span> Why Do We Care?</h2>
+                <p>Neural networks cannot work directly with raw words. Embeddings turn words into something the model can compare,
+                   reuse, and reason about across many sentences.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEA</span> One Example</h2>
+                <p>In a good embedding space, <strong>kitten</strong> and <strong>cat</strong> land close together,
+                   while <strong>kitten</strong> and <strong>bus</strong> land far apart.</p>
+                <div class="info-box">
+                    <span class="info-box-icon">\uD83C\uDFF7\uFE0F</span>
+                    <span class="info-box-text"><strong>Real term to remember:</strong> models often compare word vectors using
+                    <strong>cosine similarity</strong>, which checks whether two vectors point in nearly the same direction.</span>
+                </div>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83D\uDCD6</span> From Words to Numbers</h2>
                 <p>How do we turn words into numbers for a computer brain? There are two ways:</p>
 
@@ -641,6 +664,24 @@ model.<span class="function">compile</span>(optimizer=<span class="string">'adam
                 <p>Word2Vec is the famous trick that taught computers to understand words!
                    It learns by playing a guessing game with words and their neighbors.
                    Let's see how it works -- it has two fun ways to play!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Is Word2Vec?</h2>
+                <p><strong>Word2Vec</strong> is a training method for learning embeddings by predicting nearby words.
+                   A <strong>context window</strong> is the set of neighbor words around a center word.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83C\uDFAF</span> Why Do We Care?</h2>
+                <p>If a model can predict which words belong together, it can learn useful meaning without anyone writing rules by hand.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEE</span> One Worked Example</h2>
+                <p>For <strong>"The cat sat on the mat"</strong>, if the center word is <strong>sat</strong> and the window size is <strong>2</strong>,
+                   the context words are <strong>the, cat, on, the</strong>. Skip-gram learns <em>sat -&gt; neighbors</em>.
+                   CBOW learns <em>neighbors -&gt; sat</em>.</p>
             </div>
 
             <div class="section">
@@ -1258,6 +1299,30 @@ result = model.wv.<span class="function">most_similar</span>(
                 <p>Recurrent Neural Networks (RNNs) are special because they have a memory!
                    They read words one at a time and remember what came before.
                    This makes them great at understanding sentences, where the order of words matters!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> What Are RNN and LSTM?</h2>
+                <p>An <strong>RNN</strong> reads a sequence one token at a time while carrying a hidden memory forward.
+                   An <strong>LSTM</strong> is a stronger RNN that uses gates to decide what to keep, forget, and output.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83C\uDFAF</span> Why Do We Care?</h2>
+                <p>Word order changes meaning. A sequence model can treat <strong>"good"</strong> and <strong>"not good"</strong>
+                   differently because it remembers what came before.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83E\uDDEA</span> Sentiment Walkthrough</h2>
+                <p>In <strong>"The movie looked great but felt boring"</strong>, the hidden state becomes more positive after
+                   <strong>great</strong> and more negative after <strong>boring</strong>. The final hidden state is the sentence summary
+                   used for the sentiment decision.</p>
+                <div class="info-box warning">
+                    <span class="info-box-icon">\uD83E\uDDE0</span>
+                    <span class="info-box-text"><strong>Real terms to remember:</strong> hidden state = running memory,
+                    vanishing gradient = old information fading away, LSTM gate = a learned control switch.</span>
+                </div>
             </div>
 
             <div class="section">

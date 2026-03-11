@@ -31,6 +31,13 @@ const Chapter4 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>TensorBoard</strong> is a visualization tool for monitoring model training, metrics, and internal behavior.</p>
+                <p><strong>Why it matters:</strong> it helps you catch bad training patterns early, like overfitting or unstable loss, before you waste more compute.</p>
+                <p><strong>Example:</strong> if training accuracy rises but validation accuracy stalls, TensorBoard makes that gap obvious so you know the model is memorizing.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83D\uDCCA</span> What is TensorBoard?</h2>
                 <p>TensorBoard is a dashboard that shows how your AI is learning. Think of it
                    like a video game scoreboard that updates after every round. You can see
@@ -653,6 +660,13 @@ model.<span class="function">fit</span>(
                 <p>Why does everyone want a GPU for AI? Because a GPU can do THOUSANDS of
                    math problems at the same time! Let's see just how much faster it is
                    and why this is a game-changer for training neural networks.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> a <strong>GPU</strong> is a processor designed for highly parallel math, which matches the matrix-heavy work used in deep learning.</p>
+                <p><strong>Why it matters:</strong> faster training means you can use bigger models, larger batches, and more experiments in the same amount of time.</p>
+                <p><strong>Example:</strong> instead of multiplying one row of a matrix at a time, a GPU can work on many rows and many examples from the batch at once.</p>
             </div>
 
             <div class="section">

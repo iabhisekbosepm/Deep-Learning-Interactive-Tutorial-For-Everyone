@@ -25,6 +25,13 @@ const Chapter6 = {
                 <p>Cool! Regular AI brains look at every tiny dot in a picture one by one. But CNNs are smarter -- they slide a little magnifying glass across the picture to find patterns like edges, shapes, and textures. It is like how you spot shapes in clouds!</p>
             </div>
 
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> a <strong>CNN</strong> uses small learnable filters that slide across an image to detect local visual patterns.</p>
+                <p><strong>Why it matters:</strong> this is much more efficient than learning separate weights for every pixel position.</p>
+                <p><strong>Example:</strong> one early filter may activate on vertical edges, while later layers combine those edges into features like eyes, wheels, or letters.</p>
+            </div>
+
             <!-- What is Convolution -->
             <div class="section">
                 <h2><span class="section-icon">\uD83D\uDD0D</span> What is Convolution?</h2>
@@ -716,6 +723,13 @@ model.<span class="function">summary</span>()
                 <p>Welcome to art class! Data augmentation is when we make NEW training pictures by flipping, rotating, and zooming the ones we already have. It is like having one coloring page and making lots of different versions of it. More practice pictures for free!</p>
             </div>
 
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>data augmentation</strong> creates extra training examples by transforming existing ones, such as flipping, rotating, or changing brightness.</p>
+                <p><strong>Why it matters:</strong> it teaches the model to recognize the object even when the image changes slightly.</p>
+                <p><strong>Example:</strong> a slightly rotated cat image is still labeled cat, so the model learns that exact camera angle is not the important feature.</p>
+            </div>
+
             <!-- Why Augmentation -->
             <div class="section">
                 <h2><span class="section-icon">\uD83E\uDDE9</span> Why Data Augmentation?</h2>
@@ -1182,6 +1196,13 @@ model.<span class="function">compile</span>(optimizer=<span class="string">'adam
                 <span class="chapter-badge">Module 6 \u2022 Chapter 6.3</span>
                 <h1>Transfer Learning Studio</h1>
                 <p>Amazing! Why start from zero when someone already taught an AI to see millions of pictures? Transfer learning is like using knowledge from one task to help with another -- like how knowing how to ride a bike helps you learn a motorcycle! We can borrow a smart AI brain and teach it our own stuff!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> <strong>transfer learning</strong> starts from a model that already learned useful features on a large dataset, then adapts it to a new task.</p>
+                <p><strong>Why it matters:</strong> it saves data and compute because you reuse learned features instead of starting from zero.</p>
+                <p><strong>Example:</strong> a model pretrained on millions of images can be fine-tuned on a smaller flower dataset much faster than training a new model from scratch.</p>
             </div>
 
             <!-- What is Transfer Learning -->

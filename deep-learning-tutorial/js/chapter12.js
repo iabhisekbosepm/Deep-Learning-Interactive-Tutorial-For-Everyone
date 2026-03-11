@@ -47,6 +47,13 @@ const Chapter12 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\uD83D\uDCD8</span> Definition, Why It Matters, Example</h2>
+                <p><strong>Definition:</strong> a <strong>state space model</strong> keeps a running internal state instead of comparing every token with every other token.</p>
+                <p><strong>Why it matters:</strong> this can scale better on very long sequences than standard attention.</p>
+                <p><strong>Example:</strong> while reading a long story, Mamba keeps updating a selective memory of what matters instead of reopening every earlier sentence.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\uD83D\uDCDA</span> The Long Book Problem</h2>
                 <p>Transformers are super smart but slow with really long books. Mamba is like a <strong>speed reader</strong> who zooms through the whole book just as well but WAY faster!</p>
                 <p>Think about it like this: when a Transformer reads, it compares <em>every single word</em> with <em>every other word</em>. That's like asking everyone in your class to shake hands with everyone else. With 10 kids that's 45 handshakes, but with 20 kids it's 190! It grows really fast!</p>

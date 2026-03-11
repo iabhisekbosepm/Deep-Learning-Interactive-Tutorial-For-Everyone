@@ -93,6 +93,13 @@ const Chapter15 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\u{1F9EE}</span> One Worked Example</h2>
+                <p>If each weight moves from 16-bit storage to 4-bit storage, it uses one quarter as much space.
+                   So a model that needs about <strong>140 GB</strong> of raw FP16 weight storage would need about <strong>35 GB</strong>
+                   in 4-bit form before extra metadata overhead.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u{1F522}</span> Bits: The Building Blocks of Numbers</h2>
                 <p>Think of <strong>bits</strong> like colored crayons. More crayons = more colors you can draw with:</p>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0;">
@@ -114,7 +121,7 @@ const Chapter15 = {
                 </div>
                 <div class="info-box success">
                     <span class="info-box-icon">\u{2B50}</span>
-                    <span class="info-box-text"><strong>Real-world impact:</strong> A 70 billion parameter model in FP16 needs ~140 GB of memory (multiple expensive GPUs!). In INT4, it shrinks to ~35 GB and fits on a single GPU! DeepSeek even ran a 120B model on a single T4 (16 GB) with aggressive quantization.</span>
+                    <span class="info-box-text"><strong>Illustrative example:</strong> A 70 billion parameter model in FP16 is roughly 140 GB of raw weight memory. In INT4, the same weights are roughly 35 GB before runtime overhead such as caches and activations.</span>
                 </div>
             </div>
 
@@ -240,7 +247,7 @@ model.quantize(quant_config={<span class="string">"w_bit"</span>: <span class="n
                     </div>
                     <div class="info-box" style="border-left-color:#f59e0b;">
                         <span class="info-box-icon">4\uFE0F\u20E3</span>
-                        <span class="info-box-text"><strong>A 70B model drops from 140 GB to 35 GB</strong> with 4-bit quantization - fitting on a single GPU instead of needing many!</span>
+                        <span class="info-box-text"><strong>Rule of thumb:</strong> 4-bit quantization cuts raw weight storage by about 4x, though real deployment memory is usually higher than the raw weight number alone.</span>
                     </div>
                 </div>
             </div>
@@ -617,6 +624,17 @@ model.quantize(quant_config={<span class="string">"w_bit"</span>: <span class="n
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is Distributed Training?</h2>
+                <p><strong>Distributed training</strong> means multiple GPUs share the work of training one model. They can split the data, split the layers, or split the optimizer state.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> One Worked Example</h2>
+                <p>With data parallelism on 4 GPUs, GPU 0 sees batch A, GPU 1 sees batch B, GPU 2 sees batch C, and GPU 3 sees batch D.
+                   Each computes gradients, then they average those gradients so every GPU keeps the same updated model.</p>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u{1F3D7}\uFE0F</span> Why One GPU Is Not Enough</h2>
                 <p>Imagine trying to build a <strong>100-story skyscraper</strong> with just ONE construction crew. It would take <strong>forever</strong>! But what if you had FOUR crews working together? You could finish way faster!</p>
                 <p>Training giant AI models like GPT-4 or DeepSeek has the same problem. One GPU simply does not have enough memory or speed. A 175 billion parameter model needs about <strong>3 terabytes of memory</strong> during training! No single GPU has that much. So we need to <strong>split the work</strong> across many GPUs.</p>
@@ -720,7 +738,7 @@ model = DistributedDataParallel(model)
                 </div>
                 <div class="info-box success">
                     <span class="info-box-icon">\u{2B50}</span>
-                    <span class="info-box-text"><strong>Real Example:</strong> Training a 175B model with 4 GPUs. Without ZeRO: each GPU needs ~3 TB. With ZeRO Stage 3: each GPU only needs ~750 GB. That is 4x less per GPU! With even more GPUs, it drops further.</span>
+                    <span class="info-box-text"><strong>Illustrative example:</strong> if model state is split evenly across 4 GPUs with ZeRO Stage 3, each GPU stores roughly one fourth of that state instead of a full copy. Real memory use still depends on activations and communication buffers.</span>
                 </div>
             </div>
 
@@ -1403,6 +1421,23 @@ model, optimizer, _, _ = deepspeed.initialize(
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is an Inference Engine?</h2>
+                <p>An <strong>inference engine</strong> is the runtime system that serves a trained model to real users.
+                   <strong>Latency</strong> is how long one request waits. <strong>Throughput</strong> is how many requests the system finishes in a period of time.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> One Serving Example</h2>
+                <p>Suppose three users send prompts at once. One needs 20 output tokens, one needs 80, and one needs 40.
+                   With static batching, the short request waits for the long one. With continuous batching, the short request leaves early and a new user can take its slot.</p>
+                <div class="info-box">
+                    <span class="info-box-icon">\u{1F3F7}\uFE0F</span>
+                    <span class="info-box-text"><strong>Real terms to remember:</strong> <strong>prefill</strong> = process the whole prompt,
+                    <strong>decode</strong> = generate one token at a time.</span>
+                </div>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u{1F354}</span> The Restaurant Analogy</h2>
                 <p>Imagine you run a <strong>restaurant</strong>. Customers walk in, order food, and wait for their meals. Some people order a quick salad (short prompt), and some order a 7-course feast (long conversation). How do you serve everyone efficiently?</p>
                 <p>An <strong>inference engine</strong> is like the kitchen of a restaurant for AI. When users send messages to ChatGPT or Claude, the inference engine is what actually generates the response, token by token. The challenge is serving <strong>thousands of users at once</strong> without making anyone wait too long!</p>
@@ -2073,6 +2108,21 @@ outputs = llm.generate([
                 <span class="chapter-badge">Module 15 &bull; Chapter 15.4</span>
                 <h1>External Memory</h1>
                 <p class="chapter-subtitle">Giving AI a Library Card - How Models Look Things Up Instead of Guessing!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is External Memory?</h2>
+                <p><strong>External memory</strong> means storing useful information outside the model weights so the model can look it up later. This can include retrieved documents, past conversations, working notes, or structured facts.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> End-to-End RAG Example</h2>
+                <div class="code-block">Question: "What is photosynthesis?"
+Retrieve top 3 biology chunks
+Add those chunks to the prompt
+Generate grounded answer:
+"Photosynthesis is the process plants use to turn light, water, and carbon dioxide into sugar and oxygen."</div>
+                <p>The answer is stronger because the model is reading retrieved evidence instead of guessing from memory alone.</p>
             </div>
 
             <div class="section">

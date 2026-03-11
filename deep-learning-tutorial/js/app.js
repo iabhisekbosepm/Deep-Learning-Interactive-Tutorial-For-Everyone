@@ -67,6 +67,7 @@ const App = {
         if (typeof Chapter13 !== 'undefined') Chapter13.init();
         if (typeof Chapter14 !== 'undefined') Chapter14.init();
         if (typeof Chapter15 !== 'undefined') Chapter15.init();
+        this.registerChapter('glossary', () => this.loadGlossary());
     },
 
     // ---- Navigation ----
@@ -109,6 +110,99 @@ const App = {
 
     registerChapter(id, loadFn) {
         this.chapters[id] = { load: loadFn, loaded: false };
+    },
+
+    async loadGlossary() {
+        const container = document.getElementById('chapter-glossary');
+        if (!container) return;
+
+        const glossarySource = typeof window.GLOSSARY_MARKDOWN === 'string' ? window.GLOSSARY_MARKDOWN : '';
+
+        container.innerHTML = `
+            <div class="chapter-header glossary-header">
+                <span class="chapter-badge">Reference • Glossary</span>
+                <h1>Glossary</h1>
+                <p>Read the full glossary in one continuous page, organized chapter by chapter like a handbook.</p>
+            </div>
+            <div id="glossaryContent" class="glossary-book section"></div>
+        `;
+
+        const content = document.getElementById('glossaryContent');
+        if (!glossarySource) {
+            content.innerHTML = `
+                <div class="info-box warning">
+                    <span class="info-box-icon">⚠️</span>
+                    <span class="info-box-text">Glossary content is not available.</span>
+                </div>
+            `;
+            return;
+        }
+
+        content.innerHTML = this.renderGlossaryMarkdown(glossarySource);
+    },
+
+    renderGlossaryMarkdown(markdown) {
+        const lines = markdown.split('\n');
+        let html = '<article class="glossary-book-page">';
+        let openSection = false;
+        let introAdded = false;
+
+        const closeSection = () => {
+            if (openSection) {
+                html += '</section>';
+                openSection = false;
+            }
+        };
+
+        for (const rawLine of lines) {
+            const line = rawLine.trim();
+            if (!line) {
+                continue;
+            }
+
+            if (line.startsWith('# ')) {
+                continue;
+            }
+
+            if (!introAdded && !line.startsWith('## ') && !line.startsWith('### ') && !line.startsWith('- **')) {
+                html += `<p class="glossary-book-intro">${this.escapeHTML(line)}</p>`;
+                introAdded = true;
+                continue;
+            }
+
+            if (line.startsWith('## ')) {
+                closeSection();
+                html += `<section class="glossary-book-chapter"><h2>${this.escapeHTML(line.slice(3))}</h2>`;
+                openSection = true;
+                continue;
+            }
+
+            if (line.startsWith('### ')) {
+                html += `<h3 class="glossary-book-subhead">${this.escapeHTML(line.slice(4))}</h3>`;
+                continue;
+            }
+
+            if (line.startsWith('- **')) {
+                const match = line.match(/^- \*\*(.+?)\*\*: (.+)$/);
+                if (match) {
+                    html += `<p class="glossary-entry"><strong>${this.escapeHTML(match[1])}:</strong> ${this.escapeHTML(match[2])}</p>`;
+                }
+                continue;
+            }
+        }
+
+        closeSection();
+        html += '</article>';
+        return html;
+    },
+
+    escapeHTML(value) {
+        return value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     },
 
     // ---- Sidebar (mobile) ----

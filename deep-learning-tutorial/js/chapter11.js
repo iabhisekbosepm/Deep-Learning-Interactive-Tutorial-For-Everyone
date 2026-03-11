@@ -46,6 +46,26 @@ const Chapter11 = {
             </div>
 
             <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is a Diffusion Model?</h2>
+                <p>A <strong>diffusion model</strong> learns to reverse noise. During training it sees clean images gradually corrupted,
+                   then learns how to remove that corruption step by step.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F3AF}</span> Why Do We Care?</h2>
+                <p>This lets the model create brand-new images instead of copying stored ones. It starts from random pixels and shapes them into a meaningful picture.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> Prompt-to-Output Example</h2>
+                <div class="code-block">Prompt idea: "a blue star and a green square"
+Start: random static
+Middle steps: rough shapes appear
+Final steps: edges sharpen and colors settle
+Output: a clean image matching the description</div>
+            </div>
+
+            <div class="section">
                 <h2><span class="section-icon">\u{1F4FA}</span> What Is Noise?</h2>
                 <p>Have you ever seen an old TV that shows nothing but fuzzy, sparkly static? That's what we call <strong>noise</strong> - it's completely random dots with no picture at all!</p>
                 <p>Diffusion models are like magic erasers that can take that fuzzy static and slowly, step by step, clean it up to reveal an amazing picture underneath. It's like using a magic cloth to wipe away the fuzziness!</p>
@@ -123,6 +143,10 @@ const Chapter11 = {
             <div class="section">
                 <h2><span class="section-icon">\u{1F9E0}</span> The U-Net: The Noise-Cleaning Brain</h2>
                 <p>The AI uses a special brain called a <strong>U-Net</strong> to figure out what noise to remove. It's called "U-Net" because the way it processes information looks like the letter U!</p>
+                <div class="info-box">
+                    <span class="info-box-icon">\u{1F3F7}\uFE0F</span>
+                    <span class="info-box-text"><strong>Real term to remember:</strong> U-Net is the denoiser network. It predicts the noise residual to remove at each step.</span>
+                </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0;">
                     <div class="feature-card" style="padding:16px;text-align:center;">
                         <div style="font-size:28px;">\u{1F50D}</div>
@@ -442,6 +466,17 @@ show_image(image)  <span class="comment"># WOW! \u{1F3A8}</span></code></pre></d
                 <span class="chapter-badge">Module 11 &bull; Chapter 11.2</span>
                 <h1>Text-to-Image: Words Become Pictures!</h1>
                 <p>Imagine having a magic artist who can paint ANYTHING you describe with words. That's what text-to-image AI does!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is Text-to-Image?</h2>
+                <p>A <strong>text-to-image model</strong> combines a text encoder with a diffusion model so the denoising process follows the meaning of your prompt.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> One Worked Example</h2>
+                <p>If the prompt is <strong>"a red robot in a sunny park"</strong>, the text encoder turns that sentence into guidance.
+                   During denoising, the model keeps boosting shapes and colors that match <strong>robot</strong>, <strong>red</strong>, and <strong>sunny park</strong>.</p>
             </div>
 
             <div class="section">
@@ -1092,6 +1127,17 @@ image.save(<span class="string">"my_castle.png"</span>)  <span class="comment">#
                 <span class="chapter-badge">Module 11 &bull; Chapter 11.3</span>
                 <h1>Vision-Language Models: AI That Sees AND Reads!</h1>
                 <p>What if an AI could look at a picture AND understand words at the same time? Meet the models that bridge the gap between seeing and reading!</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F4D8}</span> What Is a Vision-Language Model?</h2>
+                <p>A <strong>vision-language model</strong> learns a shared representation for images and text so it can match them, describe them, or answer questions about them together.</p>
+            </div>
+
+            <div class="section">
+                <h2><span class="section-icon">\u{1F9EA}</span> One Worked Example</h2>
+                <p>Given a photo of a dog catching a frisbee and the question <strong>"What is the animal doing?"</strong>,
+                   the model combines visual features with the question text and can answer <strong>"The dog is jumping to catch a frisbee."</strong></p>
             </div>
 
             <div class="section">
